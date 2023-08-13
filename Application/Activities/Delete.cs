@@ -21,11 +21,11 @@ public class Delete
 
         public async Task Handle(Command request, CancellationToken cancellationToken)
         {
-            var activity = await _dataContext.Activities.FindAsync(request.Id);
+            var activity = await _dataContext.Activities.FindAsync(new object[] { request.Id }, cancellationToken: cancellationToken);
 
             _dataContext.Remove(activity);
 
-            await _dataContext.SaveChangesAsync();
+            await _dataContext.SaveChangesAsync(cancellationToken);
         }
     }
 }

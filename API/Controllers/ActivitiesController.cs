@@ -17,7 +17,7 @@ public class ActivitiesController : BaseApiController
     }
 
     [HttpGet("{id}")]
-    public async Task<ActionResult<Activity>> GetActivities(Guid id, CancellationToken token)
+    public async Task<ActionResult<Activity>> GetActivity(Guid id, CancellationToken token)
     {
         return await Mediator.Send(new Details.Query { Id = id }, token);
     }

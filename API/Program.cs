@@ -23,7 +23,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseCors("CorsPolicy");
+app.UseCors("CorsPolicy"); // je pred UseAuthorization kvuli pre-flight requests
 
 app.UseHttpsRedirection();
 

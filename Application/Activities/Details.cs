@@ -22,7 +22,7 @@ public class Details
 
         public async Task<Activity> Handle(Query request, CancellationToken cancellationToken)
         {
-            return await _dataContext.Activities.FindAsync(request.Id);
+            return await _dataContext.Activities.FindAsync(new object[] { request.Id }, cancellationToken: cancellationToken);
         }
     }
 }
