@@ -1,4 +1,6 @@
 ﻿using Application.Activities;
+using FluentValidation;
+using FluentValidation.AspNetCore;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
 
@@ -25,6 +27,9 @@ public static class ApplicationServiceExtentions
         {
             c.RegisterServicesFromAssemblyContaining(typeof(ActivityList));
         });
+
+        services.AddFluentValidationAutoValidation();
+        services.AddValidatorsFromAssemblyContaining<Create>();
 
         return services;
     }
