@@ -1,4 +1,6 @@
-﻿namespace Domain.Models;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace Domain.Models;
 
 public class Activity
 {
@@ -10,7 +12,8 @@ public class Activity
 
     public string? Description { get; set; }
 
-    public required string Category { get; set; }
+    [ForeignKey(nameof(ActivityCategory))]
+    public required Guid CategoryId { get; set; }
 
     public required string City { get; set; }
 

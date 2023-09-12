@@ -1,5 +1,6 @@
 ﻿using Application.Activities;
 using Application.Core;
+using Application.Request;
 using Domain.Models;
 using Microsoft.AspNetCore.Mvc;
 
@@ -24,13 +25,13 @@ public class ActivitiesController : BaseApiController
     }
 
     [HttpPost]
-    public async Task<IActionResult> CreateActivity(Activity activity, CancellationToken token)
+    public async Task<IActionResult> CreateActivity(ActivityRequest activity, CancellationToken token)
     {
         return ResultOfCreateMethod(await Mediator.Send(new Create.Command { Activity = activity }, token));        
     }
 
     [HttpPut("{id}")]
-    public async Task<IActionResult> EditActivity(Guid id, Activity activity, CancellationToken token)
+    public async Task<IActionResult> EditActivity(Guid id, ActivityRequest activity, CancellationToken token)
     {
         activity.Id = id;
         return ResultOfNoContentMethod(await Mediator.Send(new Edit.Command { Activity = activity }, token));

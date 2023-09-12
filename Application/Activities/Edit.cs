@@ -1,6 +1,6 @@
 ﻿using Application.Core;
 using Application.Mapping;
-using Domain.Models;
+using Application.Request;
 using FluentValidation;
 using MediatR;
 using Persistence;
@@ -11,7 +11,7 @@ public class Edit
 {
     public class Command : IRequest<Result<Unit>>
     {
-        public Activity Activity { get; set; }
+        public ActivityRequest Activity { get; set; }
     }
 
     public class CommandValidator : AbstractValidator<Command>
@@ -40,7 +40,7 @@ public class Edit
                 return null;
             }
 
-            activity.MapToActivity(request.Activity);
+            activity.ModifyToActivity(request.Activity);
 
             var result = await _dataContext.SaveChangesAsync(cancellationToken) > 0;
 

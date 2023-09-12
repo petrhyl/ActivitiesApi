@@ -1,5 +1,6 @@
 ﻿using Application.Core;
 using System.Net;
+using System.Text.Encodings.Web;
 using System.Text.Json;
 
 namespace API.Middleware;
@@ -30,7 +31,7 @@ public class ExceptionMiddleware
             context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
 
             var response = _environment.IsDevelopment()
-                ? new AppException(context.Response.StatusCode, ex.Message, ex.StackTrace?.ToString())
+                ? new AppException(context.Response.StatusCode, ex.Message, ex.StackTrace)
                 : new AppException(context.Response.StatusCode, "Internal Server Error");
 
             var options = new JsonSerializerOptions() { PropertyNamingPolicy = JsonNamingPolicy.CamelCase };

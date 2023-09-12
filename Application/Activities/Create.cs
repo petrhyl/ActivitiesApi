@@ -1,5 +1,6 @@
 ﻿using Application.Core;
 using Application.Mapping;
+using Application.Request;
 using Domain.Models;
 using FluentValidation;
 using MediatR;
@@ -11,7 +12,7 @@ public class Create
 {
     public class Command : IRequest<Result<Unit>>
     {
-        public required Activity Activity { get; set; }
+        public required ActivityRequest Activity { get; set; }
     }
 
     public class CommandValidator: AbstractValidator<Command>
@@ -33,7 +34,7 @@ public class Create
 
         public async Task<Result<Unit>> Handle(Command request, CancellationToken cancellationToken)
         {
-            var activity = request.Activity.MapToNewActivity();
+            var activity = request.Activity.MapToActivity();
 
             _dataContext.Activities.Add(activity);
 
