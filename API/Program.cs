@@ -1,5 +1,7 @@
 using API.Extensions;
 using API.Middleware;
+using Domain.Models;
+using Microsoft.AspNetCore.Identity;
 using Persistence;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -7,10 +9,11 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddIdentityService(builder.Configuration);
 builder.Services.AddApplicationServices(builder.Configuration);
 
 var app = builder.Build();
@@ -28,12 +31,14 @@ app.UseCors("CorsPolicy"); // je pred UseAuthorization kvuli pre-flight requests
 
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
 
 using var scope = app.Services.CreateScope();
 var dbContext = scope.ServiceProvider.GetRequiredService<DataContext>();
-await Seed.SeedData(dbContext);
+var userManager = scope.ServiceProvider.GetRequiredService<UserManager<AppUser>>();
+await Seed.SeedData(dbContext, userManager);
 
 app.Run();

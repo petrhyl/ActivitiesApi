@@ -4,7 +4,7 @@ namespace Application.Response;
 
 public class ActivityResponse
 {
-    public Guid? Id { get; set; }
+    public required Guid Id { get; init; }
 
     public required string Title { get; init; }
 

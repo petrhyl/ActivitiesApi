@@ -11,6 +11,7 @@ public static class ActivityMapper
     {
         return new ActivityResponse
         {
+            Id = activity.Id.Value,
             Title = activity.Title,
             Description = activity.Description,
             Category = new ActivityCategoryResponse
@@ -25,24 +26,24 @@ public static class ActivityMapper
         };
     }
 
-    public static void ModifyToActivity(this Activity activity, ActivityRequest request)
+    public static void ModifyActivity(this Activity activity, ActivityRequest request)
     {
-        activity.Title = activity.Title;
-        activity.Description = activity.Description;
-        activity.CategoryId = activity.CategoryId;
-        activity.BeginDate = activity.BeginDate;
-        activity.City = activity.City;
-        activity.Venue = activity.Venue;
-
+        activity.Title = request.Title;
+        activity.Description = request.Description;
+        activity.CategoryId = request.Category.Id;
+        activity.BeginDate = request.BeginDate;
+        activity.City = request.City;
+        activity.Venue = request.Venue;
     }
 
     public static Activity MapToActivity(this ActivityRequest request)
     {
         return new Activity
         {
+            Id = request.Id,
             Title = request.Title,
             Description = request.Description,
-            CategoryId = request.CategoryId,
+            CategoryId = request.Category.Id,
             BeginDate = request.BeginDate,
             City = request.City,
             Venue = request.Venue,
@@ -57,7 +58,7 @@ public static class ActivityMapper
 
             return new ActivityResponse
             {
-                Id = a.Id,
+                Id = a.Id!.Value,
                 Title = a.Title,
                 BeginDate = a.BeginDate,
                 Description = a.Description,

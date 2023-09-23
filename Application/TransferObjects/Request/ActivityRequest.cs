@@ -1,4 +1,6 @@
-﻿namespace Application.Request;
+﻿using Application.TransferObjects.Response;
+
+namespace Application.Request;
 
 public class ActivityRequest
 {
@@ -10,7 +12,7 @@ public class ActivityRequest
 
     public string Description { get; init; }
 
-    public required Guid CategoryId { get; init; }
+    public required ActivityCategoryResponse Category { get; init; }
 
     public required string City { get; init; }
 

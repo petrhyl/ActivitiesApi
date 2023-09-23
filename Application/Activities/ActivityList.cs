@@ -1,7 +1,6 @@
 ﻿using Application.Core;
 using Application.Mapping;
 using Application.Response;
-using Domain.Models;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Persistence;

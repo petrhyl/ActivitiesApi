@@ -1,4 +1,5 @@
-﻿using Application.Core;
+﻿using Application.Activities.Validator;
+using Application.Core;
 using Application.Mapping;
 using Application.Request;
 using FluentValidation;
@@ -16,9 +17,12 @@ public class Edit
 
     public class CommandValidator : AbstractValidator<Command>
     {
-        public CommandValidator()
+        private readonly DataContext _dataContext;
+
+        public CommandValidator(DataContext dataContext)
         {
-            RuleFor(x => x.Activity).SetValidator(new ActivityValidator());
+            _dataContext = dataContext;
+            RuleFor(x => x.Activity).SetValidator(new ActivityValidator(dataContext));
         }
     }
 
@@ -40,13 +44,18 @@ public class Edit
                 return null;
             }
 
-            activity.ModifyToActivity(request.Activity);
+            activity.Title = request.Activity.Title;
+            activity.Description = request.Activity.Description;
+            activity.CategoryId = request.Activity.Category.Id;
+            activity.BeginDate = request.Activity.BeginDate;
+            activity.City = request.Activity.City;
+            activity.Venue = request.Activity.Venue;
 
             var result = await _dataContext.SaveChangesAsync(cancellationToken) > 0;
 
             if (!result)
             {
-                return Result<Unit>.Failure("Failed to edit the activity");
+                return Result<Unit>.Failure("No changes.");
             }
 
             return Result<Unit>.Success(Unit.Value);

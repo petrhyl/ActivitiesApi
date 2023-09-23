@@ -2,6 +2,7 @@
 using Application.Core;
 using Application.Request;
 using Domain.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers;
@@ -25,13 +26,15 @@ public class ActivitiesController : BaseApiController
     }
 
     [HttpPost]
+    [Authorize]
     public async Task<IActionResult> CreateActivity(ActivityRequest activity, CancellationToken token)
     {
         return ResultOfCreateMethod(await Mediator.Send(new Create.Command { Activity = activity }, token));        
     }
 
     [HttpPut("{id}")]
-    public async Task<IActionResult> EditActivity(Guid id, ActivityRequest activity, CancellationToken token)
+    [Authorize]
+    public async Task<IActionResult> EditActivity([FromRoute]Guid id, [FromBody]ActivityRequest activity, CancellationToken token)
     {
         activity.Id = id;
         return ResultOfNoContentMethod(await Mediator.Send(new Edit.Command { Activity = activity }, token));

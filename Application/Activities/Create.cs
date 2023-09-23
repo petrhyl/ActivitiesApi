@@ -1,4 +1,5 @@
-﻿using Application.Core;
+﻿using Application.Activities.Validator;
+using Application.Core;
 using Application.Mapping;
 using Application.Request;
 using Domain.Models;
@@ -16,10 +17,10 @@ public class Create
     }
 
     public class CommandValidator: AbstractValidator<Command>
-    {
-        public CommandValidator()
+    { 
+        public CommandValidator(DataContext dataContext)
         {
-            RuleFor(x => x.Activity).SetValidator(new ActivityValidator());
+            RuleFor(x => x.Activity).SetValidator(new ActivityValidator(dataContext));
         }
     }
 
