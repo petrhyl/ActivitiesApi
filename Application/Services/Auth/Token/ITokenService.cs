@@ -1,6 +1,6 @@
 ﻿using Domain.Models;
 
-namespace API.Services;
+namespace Application.Services.Auth.Token;
 
 public interface ITokenService
 {

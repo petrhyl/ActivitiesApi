@@ -1,8 +1,7 @@
 ﻿using Application.Activities.Validator;
-using Application.Core;
+using Domain.Core;
 using Application.Mapping;
 using Application.Request;
-using Domain.Models;
 using FluentValidation;
 using MediatR;
 using Persistence;
@@ -43,7 +42,7 @@ public class Create
 
             if (!result)
             {
-                return Result<Unit>.Failure("Failed to create activity.");
+                throw new ApplicationException("Creation of activity failed.");
             }
 
             return Result<Unit>.Success(Unit.Value);

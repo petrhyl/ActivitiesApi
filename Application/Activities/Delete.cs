@@ -1,4 +1,4 @@
-﻿using Application.Core;
+﻿using Domain.Core;
 using MediatR;
 using Persistence;
 
@@ -35,7 +35,7 @@ public class Delete
 
             if (!result)
             {
-                return Result<Unit>.Failure("Failed to delete the activity");
+                throw new ApplicationException("Failed to delete the activity.");
             }
 
             return Result<Unit>.Success(Unit.Value);

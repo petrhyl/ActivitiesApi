@@ -1,8 +1,8 @@
-﻿namespace Application.Core;
+﻿namespace Domain.Core;
 
 public class AppException
 {
-    public AppException(int statusCode, string message, string details = null)
+    public AppException(int statusCode, string message, string? details = null)
     {
         StatusCode = statusCode;
         Message = message;
@@ -13,6 +13,6 @@ public class AppException
 
     public string Message { get; set; }
 
-    public string Details { get; set; }
+    public string? Details { get; set; }
 }
 

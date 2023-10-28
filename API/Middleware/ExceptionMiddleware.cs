@@ -1,6 +1,5 @@
-﻿using Application.Core;
+﻿using Domain.Core;
 using System.Net;
-using System.Text.Encodings.Web;
 using System.Text.Json;
 
 namespace API.Middleware;

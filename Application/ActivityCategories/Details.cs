@@ -1,4 +1,4 @@
-﻿using Application.Core;
+﻿using Domain.Core;
 using Application.Mapping;
 using Application.TransferObjects.Response;
 using MediatR;
@@ -28,7 +28,7 @@ public class Details
 
             if (category is null)
             {
-                throw new ArgumentException("The category does not exist");
+                return Result<ActivityCategoryResponse>.Success(null);
             }
 
             var response = category.MapToResponse();

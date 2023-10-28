@@ -1,4 +1,4 @@
-﻿using Application.Core;
+﻿using Domain.Core;
 using Application.Mapping;
 using Application.TransferObjects.Response;
 using MediatR;

@@ -1,6 +1,6 @@
-﻿using Application.Core;
-using Application.Mapping;
+﻿using Application.Mapping;
 using Application.Response;
+using Domain.Core;
 using Domain.Models;
 using MediatR;
 using Persistence;
@@ -29,7 +29,7 @@ public class Details
 
             if (activity is null)
             {
-                throw new ArgumentException("some error");
+                return Result<ActivityResponse>.Success(null);
             }
 
             var category = await _dataContext.ActivityCategories.FindAsync(new object[] { activity.CategoryId }, cancellationToken);

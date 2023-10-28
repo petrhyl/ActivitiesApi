@@ -1,4 +1,4 @@
-﻿using API.Services;
+﻿using Application.Services.Auth.Token;
 using Domain.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;

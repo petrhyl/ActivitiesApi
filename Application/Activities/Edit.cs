@@ -1,5 +1,5 @@
 ﻿using Application.Activities.Validator;
-using Application.Core;
+using Domain.Core;
 using Application.Mapping;
 using Application.Request;
 using FluentValidation;
@@ -41,7 +41,7 @@ public class Edit
 
             if (activity is null)
             {
-                return null;
+                throw new ArgumentException("Activity not found.");
             }
 
             activity.Title = request.Activity.Title;

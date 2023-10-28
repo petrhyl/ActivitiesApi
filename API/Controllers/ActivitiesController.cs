@@ -1,5 +1,4 @@
 ﻿using Application.Activities;
-using Application.Core;
 using Application.Request;
 using Domain.Models;
 using Microsoft.AspNetCore.Authorization;
@@ -9,10 +8,6 @@ namespace API.Controllers;
 
 public class ActivitiesController : BaseApiController
 {
-    public ActivitiesController()
-    {
-    }
-
     [HttpGet]
     public async Task<IActionResult> GetActivities(CancellationToken token)
     {
