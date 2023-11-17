@@ -1,4 +1,5 @@
-﻿using Application.Services.Auth.Token;
+﻿using Application.Services.Auth;
+using Application.Services.Auth.Token;
 using Domain.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
@@ -20,7 +21,7 @@ public static class IdentityServiceExtensions
         })
         .AddEntityFrameworkStores<DataContext>();
 
-        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config["ApiKey"]));
+        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config["ApiKey"]!));
 
         services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             .AddJwtBearer(opt =>
@@ -35,6 +36,7 @@ public static class IdentityServiceExtensions
             });
 
         services.AddScoped<ITokenService,TokenService>();
+        services.AddScoped<IAuthService, AuthService>();
 
         return services;
     }

@@ -29,7 +29,7 @@ public static class ApplicationServiceExtentions
         });
 
         services.AddFluentValidationAutoValidation();
-        services.AddValidatorsFromAssemblyContaining<Create>();
+        services.AddValidatorsFromAssemblyContaining<Create>();       
 
         return services;
     }

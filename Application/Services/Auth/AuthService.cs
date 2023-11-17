@@ -4,9 +4,9 @@ using Application.TransferObjects.Request;
 using Application.TransferObjects.Response;
 using Domain.Core;
 using Domain.Models;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 
 namespace Application.Services.Auth;
 
@@ -20,6 +20,7 @@ public class AuthService : IAuthService
         _userManager = userManager;
         _tokenService = tokenService;
     }
+       
 
     public async Task<Result<AppUserResponse>> LogUserIn(LoginRequest loginRequest)
     {
@@ -64,6 +65,25 @@ public class AuthService : IAuthService
         }
 
         var token = _tokenService.CreateToken(user);
+
+        return Result<AppUserResponse>.Success(user.MapToResponse(token));
+    }
+
+    public async Task<Result<AppUserResponse>> GetCurrentUser(ClaimsPrincipal claims, string token)
+    {
+        var userId = claims?.FindFirst(ClaimTypes.NameIdentifier).Value;
+
+        if (userId is null)
+        {
+            return Result<AppUserResponse>.Failure("User cannot be identified.");
+        }
+
+        var user = await _userManager.FindByIdAsync(userId);
+
+        if (user is null)
+        {
+            return Result<AppUserResponse>.Failure("User cannot be identified.");
+        }
 
         return Result<AppUserResponse>.Success(user.MapToResponse(token));
     }

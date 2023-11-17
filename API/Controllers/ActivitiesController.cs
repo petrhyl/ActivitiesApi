@@ -36,6 +36,7 @@ public class ActivitiesController : BaseApiController
     }
 
     [HttpDelete("{id}")]
+    [Authorize]
     public async Task<IActionResult> DeleteActivity(Guid id, CancellationToken token)
     {
         return ResultOfNoContentMethod((await Mediator.Send(new Delete.Command { Id = id }, token)));
