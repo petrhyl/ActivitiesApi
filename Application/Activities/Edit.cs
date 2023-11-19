@@ -1,10 +1,10 @@
 ﻿using Application.Activities.Validator;
 using Domain.Core;
 using Application.Mapping;
-using Application.Request;
+using Contracts.Request;
 using FluentValidation;
 using MediatR;
-using Persistence;
+using Application.Interfaces;
 
 namespace Application.Activities;
 
@@ -12,36 +12,38 @@ public class Edit
 {
     public class Command : IRequest<Result<Unit>>
     {
-        public ActivityRequest Activity { get; set; }
+        public required ActivityRequest Activity { get; set; }
     }
 
     public class CommandValidator : AbstractValidator<Command>
     {
-        private readonly DataContext _dataContext;
-
-        public CommandValidator(DataContext dataContext)
+        public CommandValidator(IActivityRepository activityRepository)
         {
-            _dataContext = dataContext;
-            RuleFor(x => x.Activity).SetValidator(new ActivityValidator(dataContext));
+            RuleFor(x => x.Activity).SetValidator(new ActivityValidator(activityRepository));
         }
     }
 
-    public class Handler : IRequestHandler<Command, Result<Unit>>
+    public class Handler : IRequestHandler<Command, Result<Unit>?>
     {
-        private readonly DataContext _dataContext;
+        private readonly IActivityRepository _activityRepository;
 
-        public Handler(DataContext dataContext)
+        public Handler(IActivityRepository activityRepository)
         {
-            _dataContext = dataContext;
+            _activityRepository = activityRepository;
         }
 
-        public async Task<Result<Unit>> Handle(Command request, CancellationToken cancellationToken)
+        public async Task<Result<Unit>?> Handle(Command request, CancellationToken cancellationToken)
         {
-            var activity = await _dataContext.Activities.FindAsync(new object[] { request.Activity.Id }, cancellationToken: cancellationToken);
+            if (request.Activity?.Id is null)
+            {
+                return Result<Unit>.Failure("Activity ID is not provided");
+            }
+
+            var activity = await _activityRepository.GetActivityById(request.Activity.Id!.Value);
 
             if (activity is null)
             {
-                throw new ArgumentException("Activity not found.");
+                return null;
             }
 
             activity.Title = request.Activity.Title;
@@ -51,11 +53,11 @@ public class Edit
             activity.City = request.Activity.City;
             activity.Venue = request.Activity.Venue;
 
-            var result = await _dataContext.SaveChangesAsync(cancellationToken) > 0;
+            var result = await _activityRepository.UpdateActivity(activity);
 
             if (!result)
             {
-                return Result<Unit>.Failure("No changes.");
+                return Result<Unit>.Failure("Activity cannot be updated.");
             }
 
             return Result<Unit>.Success(Unit.Value);

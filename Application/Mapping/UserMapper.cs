@@ -1,5 +1,5 @@
-﻿using Application.TransferObjects.Request;
-using Application.TransferObjects.Response;
+﻿using Contracts.Request;
+using Contracts.Response;
 using Domain.Models;
 
 namespace Application.Mapping;
@@ -10,8 +10,10 @@ public static class UserMapper
     {
         return new AppUserResponse
         {
-            DisplayName = user.DisplayName,
-            Username = user.UserName,
+            DisplayName = user.DisplayName ?? string.Empty,
+            Username = user.UserName!,
+            Email = user.Email!,
+            Bio = user.Bio,
             ImageUrl = null,
             Token = token
         };

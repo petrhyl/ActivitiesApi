@@ -1,5 +1,6 @@
 ﻿using Application.Activities;
-using Application.Request;
+using Application.Services.Auth;
+using Contracts.Request;
 using Domain.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -28,7 +29,7 @@ public class ActivitiesController : BaseApiController
     }
 
     [HttpPut("{id}")]
-    [Authorize]
+    [Authorize(Policy = AuthConstants.IsActivityHostPolicy)]
     public async Task<IActionResult> EditActivity([FromRoute]Guid id, [FromBody]ActivityRequest activity, CancellationToken token)
     {
         activity.Id = id;
@@ -36,9 +37,16 @@ public class ActivitiesController : BaseApiController
     }
 
     [HttpDelete("{id}")]
-    [Authorize]
+    [Authorize(Policy = AuthConstants.IsActivityHostPolicy)]
     public async Task<IActionResult> DeleteActivity(Guid id, CancellationToken token)
     {
         return ResultOfNoContentMethod((await Mediator.Send(new Delete.Command { Id = id }, token)));
+    }
+
+    [HttpPost("{id}/attend")]
+    [Authorize]
+    public async Task<IActionResult> AttendActivity(Guid id)
+    {
+        return ResultOfNoContentMethod(await Mediator.Send(new UpdateAttendance.Command { Id = id }));
     }
 }

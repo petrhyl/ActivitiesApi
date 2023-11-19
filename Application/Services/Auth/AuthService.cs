@@ -1,9 +1,10 @@
 ﻿using Application.Mapping;
 using Application.Services.Auth.Token;
-using Application.TransferObjects.Request;
-using Application.TransferObjects.Response;
+using Contracts.Request;
+using Contracts.Response;
 using Domain.Core;
 using Domain.Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
@@ -14,13 +15,14 @@ public class AuthService : IAuthService
 {
     private readonly UserManager<AppUser> _userManager;
     private readonly ITokenService _tokenService;
-
-    public AuthService(UserManager<AppUser> userManager, ITokenService tokenService)
+    private readonly IHttpContextAccessor _httpContextAccessor;
+    public AuthService(UserManager<AppUser> userManager, ITokenService tokenService, IHttpContextAccessor httpContextAccessor)
     {
         _userManager = userManager;
         _tokenService = tokenService;
+        _httpContextAccessor = httpContextAccessor;
     }
-       
+
 
     public async Task<Result<AppUserResponse>> LogUserIn(LoginRequest loginRequest)
     {
@@ -69,9 +71,9 @@ public class AuthService : IAuthService
         return Result<AppUserResponse>.Success(user.MapToResponse(token));
     }
 
-    public async Task<Result<AppUserResponse>> GetCurrentUser(ClaimsPrincipal claims, string token)
+    public async Task<Result<AppUserResponse>> GetCurrentUser(string token)
     {
-        var userId = claims?.FindFirst(ClaimTypes.NameIdentifier).Value;
+        var userId = GetCurrentUserId();
 
         if (userId is null)
         {
@@ -86,6 +88,11 @@ public class AuthService : IAuthService
         }
 
         return Result<AppUserResponse>.Success(user.MapToResponse(token));
+    }
+
+    public string? GetCurrentUserId()
+    {
+        return _httpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
     }
 }
 

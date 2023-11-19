@@ -1,32 +1,35 @@
 ﻿using Domain.Models;
-using Application.Request;
-using Application.Response;
-using Application.TransferObjects.Response;
+using Contracts.Request;
+using Contracts.Response;
 
 namespace Application.Mapping;
 
 public static class ActivityMapper
 {
-    public static ActivityResponse MapToResponse(this Activity activity, ActivityCategory category)
+    public static ActivityResponse MapToResponse(this Activity activity)
     {
+        var attenders = activity.Attendees.MapToResponse();
+
         return new ActivityResponse
         {
-            Id = activity.Id.Value,
+            Id = activity.Id!.Value,
             Title = activity.Title,
             Description = activity.Description,
             Category = new ActivityCategoryResponse
             {
-                Id = category.Id!.Value,
-                Value = category.Value,
-                Name = category.Name
+                Id = activity.ActivityCategory!.Id!.Value,
+                Value = activity.ActivityCategory!.Value!,
+                Name = activity.ActivityCategory!.Name!
             },
             BeginDate = activity.BeginDate,
             City = activity.City,
             Venue = activity.Venue,
+            IsActive = activity.IsActive,
+            Attenders = attenders
         };
     }
 
-    public static void ModifyActivity(this Activity activity, ActivityRequest request)
+    public static void ModifyActivity(this Activity activity, ActivityRequest request, IEnumerable<AppUser> attenders)
     {
         activity.Title = request.Title;
         activity.Description = request.Description;
@@ -50,26 +53,48 @@ public static class ActivityMapper
         };
     }
 
+    public static Activity MapToActivityWithHost(this ActivityRequest request, AppUser attender)
+    {
+        var activity = request.MapToActivity();
+
+        activity.Attendees.Add(new ActivityAttendee
+        {
+            Activity = activity,
+            AppUserId = attender.Id,
+            AppUser = attender,
+            IsHost = true
+        });
+
+        return activity;
+    }
+
     public static IEnumerable<ActivityResponse> MapToResponse(this IEnumerable<Activity> activities, IEnumerable<ActivityCategory> categories)
     {
         return activities.Select(a =>
         {
-            var category = categories.Where(c => c.Id == a.CategoryId).First();
+            a.ActivityCategory = categories.Where(c => c.Id == a.CategoryId).FirstOrDefault();
 
-            return new ActivityResponse
+            var attenders = a.Attendees.MapToResponse();
+
+            return a.MapToResponse();
+        });
+    }
+
+    public static IEnumerable<ActivityAttenderResponse> MapToResponse(this ICollection<ActivityAttendee> attendees)
+    {
+        return attendees.Select(at =>
+        {
+            var attender = new AppUserResponse
             {
-                Id = a.Id!.Value,
-                Title = a.Title,
-                BeginDate = a.BeginDate,
-                Description = a.Description,
-                Category = new ActivityCategoryResponse
-                {
-                    Id = a.CategoryId,
-                    Name = category.Name,
-                    Value = category.Value,
-                },
-                City = a.City,
-                Venue = a.Venue,
+                Username = at.AppUser?.UserName!,
+                DisplayName = at.AppUser?.DisplayName!,
+                Email = at.AppUser?.Email!
+            };
+
+            return new ActivityAttenderResponse
+            {
+                Attender = attender,
+                IsHost = at.IsHost
             };
         });
     }

@@ -1,9 +1,10 @@
-﻿using Application.Mapping;
-using Application.Response;
+﻿using Application.Interfaces;
+using Application.Mapping;
+using Contracts.Response;
 using Domain.Core;
 using Domain.Models;
 using MediatR;
-using Persistence;
+using Microsoft.EntityFrameworkCore;
 
 namespace Application.Activities;
 
@@ -16,25 +17,26 @@ public class Details
 
     public class Handler : IRequestHandler<Query, Result<ActivityResponse>>
     {
-        private readonly DataContext _dataContext;
+        private readonly IActivityRepository _activityRepository;
 
-        public Handler(DataContext dataContext)
+        public Handler(IActivityRepository activityRepository)
         {
-            _dataContext = dataContext;
+            _activityRepository = activityRepository;
         }
 
         public async Task<Result<ActivityResponse>> Handle(Query request, CancellationToken cancellationToken)
         {
-            var activity = await _dataContext.Activities.FindAsync(new object[] { request.Id }, cancellationToken: cancellationToken);
+            var activity = await _activityRepository.GetActivityById(request.Id);
+                //.Include(a => a.Attendees)
+                //.ThenInclude(at => at.AppUser)
+                //.SingleOrDefaultAsync(a => a.Id == request.Id, cancellationToken: cancellationToken);
 
             if (activity is null)
             {
                 return Result<ActivityResponse>.Success(null);
             }
 
-            var category = await _dataContext.ActivityCategories.FindAsync(new object[] { activity.CategoryId }, cancellationToken);
-
-            var response = activity.MapToResponse(category);
+            var response = activity.MapToResponse();
 
             return Result<ActivityResponse>.Success(response);
         }

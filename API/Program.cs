@@ -1,8 +1,8 @@
 using API.Extensions;
 using API.Middleware;
 using Domain.Models;
+using Infrastructure.Common.Persistence;
 using Microsoft.AspNetCore.Identity;
-using Persistence;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,7 +14,8 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddIdentityService(builder.Configuration);
-builder.Services.AddApplicationServices(builder.Configuration);
+builder.Services.AddRepository(builder.Configuration);
+builder.Services.AddApplicationServices();
 
 var app = builder.Build();
 

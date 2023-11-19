@@ -1,5 +1,5 @@
-﻿using Application.TransferObjects.Request;
-using Application.TransferObjects.Response;
+﻿using Contracts.Request;
+using Contracts.Response;
 using Domain.Core;
 using System.Security.Claims;
 
@@ -11,5 +11,7 @@ public interface IAuthService
 
     Task<Result<AppUserResponse>> RegisterUser(RegisterRequest request);
 
-    Task<Result<AppUserResponse>> GetCurrentUser(ClaimsPrincipal claims, string token);
+    Task<Result<AppUserResponse>> GetCurrentUser(string token);
+
+    string? GetCurrentUserId();
 }

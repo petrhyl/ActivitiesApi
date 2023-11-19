@@ -1,8 +1,8 @@
 ﻿using API.ApiEndpoints;
 using Application.Mapping;
 using Application.Services.Auth;
-using Application.TransferObjects.Request;
-using Application.TransferObjects.Response;
+using Contracts.Request;
+using Contracts.Response;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -63,7 +63,7 @@ public class AccountController : ControllerBase
             token = token.Substring("Bearer".Length + 1);
         }
 
-        var result = await _authService.GetCurrentUser(User, token);
+        var result = await _authService.GetCurrentUser(token);
 
         if (!result.IsScucess)
         {

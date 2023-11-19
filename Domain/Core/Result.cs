@@ -8,7 +8,7 @@ public class Result<T>
 
     public string Error { get; set; } = string.Empty;
 
-    public static Result<T> Success(T value) => new() { IsScucess = true, Value = value };
+    public static Result<T> Success(T? value) => new() { IsScucess = true, Value = value };
 
     public static Result<T> Failure(string error) => new() { IsScucess = false, Error = error };
 }

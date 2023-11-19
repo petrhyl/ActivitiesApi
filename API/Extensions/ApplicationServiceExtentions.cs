@@ -1,20 +1,15 @@
 ﻿using Application.Activities;
 using FluentValidation;
 using FluentValidation.AspNetCore;
+using Infrastructure.Common.Persistence;
 using Microsoft.EntityFrameworkCore;
-using Persistence;
 
 namespace API.Extensions;
 
 public static class ApplicationServiceExtentions
 {
-    public static IServiceCollection AddApplicationServices(this IServiceCollection services, IConfiguration config)
+    public static IServiceCollection AddApplicationServices(this IServiceCollection services)
     {
-        services.AddDbContext<DataContext>(opt =>
-        {
-            opt.UseSqlite(config.GetConnectionString("DefaultConnection"));
-        });
-
         services.AddCors(opt =>
         {
             opt.AddPolicy("CorsPolicy", policy =>
@@ -29,7 +24,8 @@ public static class ApplicationServiceExtentions
         });
 
         services.AddFluentValidationAutoValidation();
-        services.AddValidatorsFromAssemblyContaining<Create>();       
+        services.AddValidatorsFromAssemblyContaining<Create>();
+        services.AddHttpContextAccessor();
 
         return services;
     }

@@ -11,10 +11,4 @@ public class ActivityCategoriesController : BaseApiController
     {
         return ResultOfGetMethod(await Mediator.Send(new ActivityCategoryList.Query(), token));
     }
-
-    [HttpGet("{id}")]
-    public async Task<IActionResult> GetCategory(Guid id, CancellationToken token)
-    {
-        return ResultOfGetMethod(await Mediator.Send(new Details.Query { Id = id }, token));
-    }
 }

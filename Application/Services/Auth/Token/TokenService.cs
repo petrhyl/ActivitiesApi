@@ -25,13 +25,13 @@ public class TokenService : ITokenService
             new Claim(ClaimTypes.Email, user.Email!)
         };
 
-        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["ApiKey"]));
+        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["ApiKey"]!));
         var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
 
         var tokenDescriptor = new SecurityTokenDescriptor
         {
             Subject = new ClaimsIdentity(claims),
-            Expires = DateTime.UtcNow.AddMinutes(15),
+            Expires = DateTime.UtcNow.AddDays(60),
             SigningCredentials = credentials
         };
 

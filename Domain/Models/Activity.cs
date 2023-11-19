@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Domain.Models;
 
@@ -15,7 +16,13 @@ public class Activity
     [ForeignKey(nameof(ActivityCategory))]
     public required Guid CategoryId { get; set; }
 
+    public ActivityCategory? ActivityCategory { get; set; }
+
     public required string City { get; set; }
 
     public required string Venue { get; set; }
+
+    public bool IsActive { get; set; } = true;
+
+    public ICollection<ActivityAttendee> Attendees { get; set; } = new List<ActivityAttendee>();
 }

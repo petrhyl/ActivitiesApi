@@ -1,4 +1,4 @@
-﻿using Application.TransferObjects.Response;
+﻿using Contracts.Response;
 using Domain.Models;
 
 namespace Application.Mapping;
@@ -9,7 +9,7 @@ public static class ActivityCategoryMapper
     {
         return new ActivityCategoryResponse
         {
-            Id = category.Id.Value,
+            Id = category.Id!.Value,
             Value = category.Value,
             Name = category.Name
         };
@@ -19,7 +19,7 @@ public static class ActivityCategoryMapper
     {
         return categories.Select(c => new ActivityCategoryResponse
         {
-            Id = c.Id.Value,
+            Id = c.Id!.Value,
             Value = c.Value,
             Name = c.Name
         });

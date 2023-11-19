@@ -1,9 +1,9 @@
 ﻿using Domain.Core;
 using Application.Mapping;
-using Application.Response;
+using Contracts.Response;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using Persistence;
+using Application.Interfaces;
 
 namespace Application.Activities;
 
@@ -13,18 +13,20 @@ public class ActivityList
 
     public class Handler : IRequestHandler<Query, Result<List<ActivityResponse>>>
     {
-        private readonly DataContext _dbContext;
+        private readonly IActivityRepository _activityRepository;
 
-        public Handler(DataContext dbContext)
+        public Handler(IActivityRepository activityRepository)
         {
-            _dbContext = dbContext;
+            _activityRepository = activityRepository;
         }
 
         public async Task<Result<List<ActivityResponse>>> Handle(Query request, CancellationToken cancellationToken)
         {
-            var activityList = await _dbContext.Activities.OrderByDescending(a => a.BeginDate).ToListAsync(cancellationToken);
+            var activities = await _activityRepository.GetActivities();
 
-            var categories = await _dbContext.ActivityCategories.Select(c => c).ToArrayAsync(cancellationToken);
+            var activityList = activities.OrderByDescending(a => a.BeginDate).ToList();
+
+            var categories = await _activityRepository.GetActivityCategories();
 
             var response = activityList.MapToResponse(categories);
 
