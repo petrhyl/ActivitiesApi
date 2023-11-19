@@ -18,7 +18,11 @@ public class ActivityRepository : IActivityRepository
 
     public async Task<IEnumerable<Activity>> GetActivities(CancellationToken cancellationToken = default)
     {
-        return await _dataContext.Activities.ToListAsync(cancellationToken);
+        return await _dataContext.Activities
+            .Include(a => a.ActivityCategory)
+            .Include(a => a.Attendees.Where( at => at.IsHost))
+            .ThenInclude(at => at.AppUser)
+            .ToListAsync(cancellationToken);
     }
 
     public Task<Activity?> GetActivityById(Guid id, CancellationToken cancellationToken = default)

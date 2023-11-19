@@ -27,9 +27,6 @@ public class Details
         public async Task<Result<ActivityResponse>> Handle(Query request, CancellationToken cancellationToken)
         {
             var activity = await _activityRepository.GetActivityById(request.Id);
-                //.Include(a => a.Attendees)
-                //.ThenInclude(at => at.AppUser)
-                //.SingleOrDefaultAsync(a => a.Id == request.Id, cancellationToken: cancellationToken);
 
             if (activity is null)
             {

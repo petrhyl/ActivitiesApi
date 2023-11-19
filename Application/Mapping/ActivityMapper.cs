@@ -68,12 +68,10 @@ public static class ActivityMapper
         return activity;
     }
 
-    public static IEnumerable<ActivityResponse> MapToResponse(this IEnumerable<Activity> activities, IEnumerable<ActivityCategory> categories)
+    public static IEnumerable<ActivityResponse> MapToResponse(this IEnumerable<Activity> activities)
     {
         return activities.Select(a =>
         {
-            a.ActivityCategory = categories.Where(c => c.Id == a.CategoryId).FirstOrDefault();
-
             var attenders = a.Attendees.MapToResponse();
 
             return a.MapToResponse();

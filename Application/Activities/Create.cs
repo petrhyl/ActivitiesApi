@@ -49,7 +49,7 @@ public class Create
                 throw new AuthenticationException("User is not authenticated.");
             }
 
-            var user = await _appUserRepository.GetAppUserById(currentUserId);
+            var user = await _appUserRepository.GetAppUserById(currentUserId, cancellationToken);
 
             if (user is null)
             {
@@ -58,7 +58,7 @@ public class Create
 
             var activity = request.Activity.MapToActivityWithHost(user);
 
-            var result = await _actvityRepository.CreateActivity(activity);
+            var result = await _actvityRepository.CreateActivity(activity, cancellationToken);
 
             if (!result)
             {

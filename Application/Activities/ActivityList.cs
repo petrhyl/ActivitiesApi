@@ -22,13 +22,11 @@ public class ActivityList
 
         public async Task<Result<List<ActivityResponse>>> Handle(Query request, CancellationToken cancellationToken)
         {
-            var activities = await _activityRepository.GetActivities();
+            var activities = await _activityRepository.GetActivities(cancellationToken);
 
             var activityList = activities.OrderByDescending(a => a.BeginDate).ToList();
 
-            var categories = await _activityRepository.GetActivityCategories();
-
-            var response = activityList.MapToResponse(categories);
+            var response = activityList.MapToResponse();
 
             return Result<List<ActivityResponse>>.Success(response.ToList());
         }
