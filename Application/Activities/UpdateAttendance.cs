@@ -79,7 +79,7 @@ public class UpdateAttendance
                 activity.Attendees.Add(attendance);
             }
 
-            var result = await _activityRepository.UpdateActivity(activity);
+            var result = await _activityRepository.UpdateActivity(activity, cancellationToken);
 
             if (!result)
             {

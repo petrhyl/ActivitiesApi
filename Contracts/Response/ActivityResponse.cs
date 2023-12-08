@@ -18,6 +18,6 @@ public class ActivityResponse
 
     public required bool IsActive { get; init; }
 
-    public required IEnumerable<ActivityAttenderResponse> Attenders { get; init; }
+    public required IEnumerable<ActivityAttenderResponse> Attenders { get; init; } = Enumerable.Empty<ActivityAttenderResponse>();
 }
 

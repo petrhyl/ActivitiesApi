@@ -39,7 +39,7 @@ public class Edit
                 return Result<Unit>.Failure("Activity ID is not provided");
             }
 
-            var activity = await _activityRepository.GetActivityById(request.Activity.Id!.Value);
+            var activity = await _activityRepository.GetActivityById(request.Activity.Id!.Value, cancellationToken);
 
             if (activity is null)
             {
@@ -53,7 +53,7 @@ public class Edit
             activity.City = request.Activity.City;
             activity.Venue = request.Activity.Venue;
 
-            var result = await _activityRepository.UpdateActivity(activity);
+            var result = await _activityRepository.UpdateActivity(activity, cancellationToken);
 
             if (!result)
             {

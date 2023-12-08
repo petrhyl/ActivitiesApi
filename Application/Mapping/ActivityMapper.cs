@@ -70,12 +70,7 @@ public static class ActivityMapper
 
     public static IEnumerable<ActivityResponse> MapToResponse(this IEnumerable<Activity> activities)
     {
-        return activities.Select(a =>
-        {
-            var attenders = a.Attendees.MapToResponse();
-
-            return a.MapToResponse();
-        });
+        return activities.Select(a => a.MapToResponse());
     }
 
     public static IEnumerable<ActivityAttenderResponse> MapToResponse(this ICollection<ActivityAttendee> attendees)
@@ -86,7 +81,8 @@ public static class ActivityMapper
             {
                 Username = at.AppUser?.UserName!,
                 DisplayName = at.AppUser?.DisplayName!,
-                Email = at.AppUser?.Email!
+                Email = at.AppUser?.Email!,
+                ImageUrl = at.AppUser?.ImageUrl
             };
 
             return new ActivityAttenderResponse

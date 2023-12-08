@@ -8,6 +8,8 @@ public class AppUser: IdentityUser
 
     public string? Bio {  get; set; }
 
+    public string? ImageUrl { get; set; }
+
     public ICollection<ActivityAttendee>? Attendees { get; set; }
 }
 

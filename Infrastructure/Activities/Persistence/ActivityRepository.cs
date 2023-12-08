@@ -20,7 +20,7 @@ public class ActivityRepository : IActivityRepository
     {
         return await _dataContext.Activities
             .Include(a => a.ActivityCategory)
-            .Include(a => a.Attendees.Where( at => at.IsHost))
+            .Include(a => a.Attendees)
             .ThenInclude(at => at.AppUser)
             .ToListAsync(cancellationToken);
     }

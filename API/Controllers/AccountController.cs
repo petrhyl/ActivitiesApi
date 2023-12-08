@@ -44,7 +44,7 @@ public class AccountController : ControllerBase
             return BadRequest(result.Error);
         }
 
-        return CreatedAtAction(null, result.Value);
+        return Ok(result.Value);
     }
 
     [HttpGet(AccountEndpoint.Current)]
