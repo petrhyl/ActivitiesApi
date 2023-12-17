@@ -1,5 +1,7 @@
 ﻿using Domain.Models;
 using Microsoft.AspNetCore.Identity;
+using static System.Net.Mime.MediaTypeNames;
+using System.Reflection.Metadata;
 
 namespace Infrastructure.Common.Persistence;
 
@@ -96,7 +98,8 @@ public class Seed
                 {
                     new ActivityAttendee
                     {
-                        AppUser = users[0],
+                        AppUserId = userManager.Users.Where(u => u.Email == "bob@test.com").First().Id,
+                        AppUser = userManager.Users.Where(u => u.Email == "bob@test.com").First(),
                         IsHost = true
                     }
                 }
@@ -113,12 +116,14 @@ public class Seed
                 {
                     new ActivityAttendee
                     {
-                        AppUser = users[0],
+                        AppUserId = userManager.Users.Where(u => u.Email == "bob@test.com").First().Id,
+                        AppUser = userManager.Users.Where(u => u.Email == "bob@test.com").First(),
                         IsHost = true
                     },
                     new ActivityAttendee
                     {
-                        AppUser = users[1],
+                        AppUserId = userManager.Users.Where(u => u.Email == "jane@test.com").First().Id,
+                        AppUser = userManager.Users.Where(u => u.Email == "jane@test.com").First(),
                         IsHost = false
                     }
                 }
@@ -135,12 +140,14 @@ public class Seed
                 {
                     new ActivityAttendee
                     {
-                        AppUser = users[2],
+                        AppUserId = userManager.Users.Where(u => u.Email == "tom@test.com").First().Id,
+                        AppUser = userManager.Users.Where(u => u.Email == "tom@test.com").First(),
                         IsHost = true
                     },
                     new ActivityAttendee
                     {
-                        AppUser = users[1],
+                        AppUserId = userManager.Users.Where(u => u.Email == "jane@test.com").First().Id,
+                        AppUser = userManager.Users.Where(u => u.Email == "jane@test.com").First(),
                         IsHost = false
                     },
                 }
@@ -157,12 +164,14 @@ public class Seed
                 {
                     new ActivityAttendee
                     {
-                        AppUser = users[0],
+                        AppUserId = userManager.Users.Where(u => u.Email == "bob@test.com").First().Id,
+                        AppUser = userManager.Users.Where(u => u.Email == "bob@test.com").First(),
                         IsHost = true
                     },
                     new ActivityAttendee
                     {
-                        AppUser = users[2],
+                        AppUserId = userManager.Users.Where(u => u.Email == "tom@test.com").First().Id,
+                        AppUser = userManager.Users.Where(u => u.Email == "tom@test.com").First(),
                         IsHost = false
                     },
                 }
@@ -179,24 +188,17 @@ public class Seed
                 {
                     new ActivityAttendee
                     {
-                        AppUser = users[1],
+                        AppUserId = userManager.Users.Where(u => u.Email == "jane@test.com").First().Id,
+                        AppUser = userManager.Users.Where(u => u.Email == "jane@test.com").First(),
                         IsHost = true
                     },
                     new ActivityAttendee
                     {
-                        AppUser = users[0],
+                        AppUserId = userManager.Users.Where(u => u.Email == "bob@test.com").First().Id,
+                        AppUser = userManager.Users.Where(u => u.Email == "bob@test.com").First(),
                         IsHost = false
                     },
                 }
-            },
-            new Activity
-            {
-                Title = "Future Activity 4",
-                BeginDate = DateTime.UtcNow.AddDays(14),
-                Description = "Activity 4 months in future",
-                CategoryId = categories.Where( c => c.Value == "drinks").First().Id!.Value,
-                City = "London",
-                Venue = "Yet another pub",
             },
             new Activity
             {
@@ -210,7 +212,8 @@ public class Seed
                 {
                     new ActivityAttendee
                     {
-                        AppUser = users[1],
+                        AppUserId = userManager.Users.Where(u => u.Email == "jane@test.com").First().Id,
+                        AppUser = userManager.Users.Where(u => u.Email == "jane@test.com").First(),
                         IsHost = true
                     }
                 }
@@ -227,12 +230,14 @@ public class Seed
                 {
                     new ActivityAttendee
                     {
-                        AppUser = users[0],
+                        AppUserId = userManager.Users.Where(u => u.Email == "bob@test.com").First().Id,
+                        AppUser = userManager.Users.Where(u => u.Email == "bob@test.com").First(),
                         IsHost = true
                     },
                     new ActivityAttendee
                     {
-                        AppUser = users[1],
+                        AppUserId = userManager.Users.Where(u => u.Email == "jane@test.com").First().Id,
+                        AppUser = userManager.Users.Where(u => u.Email == "jane@test.com").First(),
                         IsHost = false
                     },
                 }
@@ -249,12 +254,14 @@ public class Seed
                 {
                     new ActivityAttendee
                     {
-                        AppUser = users[2],
+                        AppUserId = userManager.Users.Where(u => u.Email == "tom@test.com").First().Id,
+                        AppUser = userManager.Users.Where(u => u.Email == "tom@test.com").First(),
                         IsHost = true
                     },
                     new ActivityAttendee
                     {
-                        AppUser = users[1],
+                        AppUserId = userManager.Users.Where(u => u.Email == "jane@test.com").First().Id,
+                        AppUser = userManager.Users.Where(u => u.Email == "jane@test.com").First(),
                         IsHost = false
                     },
                 }
@@ -271,12 +278,14 @@ public class Seed
                     {
                         new ActivityAttendee
                         {
-                            AppUser = users[0],
+                            AppUserId = userManager.Users.Where(u => u.Email == "bob@test.com").First().Id,
+                            AppUser = userManager.Users.Where(u => u.Email == "bob@test.com").First(),
                             IsHost = true
                         },
                         new ActivityAttendee
                         {
-                            AppUser = users[2],
+                            AppUserId = userManager.Users.Where(u => u.Email == "tom@test.com").First().Id,
+                            AppUser = userManager.Users.Where(u => u.Email == "tom@test.com").First(),
                             IsHost = false
                         },
                     }
