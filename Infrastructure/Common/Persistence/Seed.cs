@@ -94,6 +94,7 @@ public class Seed
                 CategoryId = categories.Where( c => c.Value == "drinks").First().Id!.Value,
                 City = "London",
                 Venue = "Pub",
+                IsActive = true,
                 Attendees = new List<ActivityAttendee>
                 {
                     new ActivityAttendee
@@ -112,6 +113,7 @@ public class Seed
                 CategoryId = categories.Where( c => c.Value == "culture").First().Id!.Value,
                 City = "Paris",
                 Venue = "Louvre",
+                IsActive = true,
                 Attendees = new List<ActivityAttendee>
                 {
                     new ActivityAttendee
@@ -136,6 +138,7 @@ public class Seed
                 CategoryId = categories.Where( c => c.Value == "food").First().Id!.Value,
                 City = "London",
                 Venue = "Natural History Museum",
+                IsActive = true,
                 Attendees = new List<ActivityAttendee>
                 {
                     new ActivityAttendee
@@ -160,6 +163,7 @@ public class Seed
                 CategoryId = categories.Where( c => c.Value == "music").First().Id!.Value,
                 City = "London",
                 Venue = "O2 Arena",
+                IsActive = true,
                 Attendees = new List<ActivityAttendee>
                 {
                     new ActivityAttendee
@@ -184,6 +188,7 @@ public class Seed
                 CategoryId = categories.Where( c => c.Value == "culture").First().Id!.Value,
                 City = "London",
                 Venue = "Another pub",
+                IsActive = true,
                 Attendees = new List<ActivityAttendee>
                 {
                     new ActivityAttendee
@@ -208,6 +213,7 @@ public class Seed
                 CategoryId = categories.Where( c => c.Value == "culture").First().Id!.Value,
                 City = "London",
                 Venue = "Just another pub",
+                IsActive = true,
                 Attendees = new List<ActivityAttendee>
                 {
                     new ActivityAttendee
@@ -226,6 +232,7 @@ public class Seed
                 CategoryId = categories.Where(c => c.Value == "music").First().Id !.Value,
                 City = "London",
                 Venue = "Roundhouse Camden",
+                IsActive = true,
                 Attendees = new List<ActivityAttendee>
                 {
                     new ActivityAttendee
@@ -250,6 +257,7 @@ public class Seed
                 CategoryId = categories.Where(c => c.Value == "film").First().Id !.Value,
                 City = "London",
                 Venue = "Somewhere on the Thames",
+                IsActive = true,
                 Attendees = new List<ActivityAttendee>
                 {
                     new ActivityAttendee
@@ -274,21 +282,22 @@ public class Seed
                 CategoryId = categories.Where(c => c.Value == "drinks").First().Id !.Value,
                 City = "London",
                 Venue = "Cinema",
-                    Attendees = new List<ActivityAttendee>
+                IsActive = true,
+                Attendees = new List<ActivityAttendee>
+                {
+                    new ActivityAttendee
                     {
-                        new ActivityAttendee
-                        {
-                            AppUserId = userManager.Users.Where(u => u.Email == "bob@test.com").First().Id,
-                            AppUser = userManager.Users.Where(u => u.Email == "bob@test.com").First(),
-                            IsHost = true
-                        },
-                        new ActivityAttendee
-                        {
-                            AppUserId = userManager.Users.Where(u => u.Email == "tom@test.com").First().Id,
-                            AppUser = userManager.Users.Where(u => u.Email == "tom@test.com").First(),
-                            IsHost = false
-                        },
-                    }
+                        AppUserId = userManager.Users.Where(u => u.Email == "bob@test.com").First().Id,
+                        AppUser = userManager.Users.Where(u => u.Email == "bob@test.com").First(),
+                        IsHost = true
+                    },
+                    new ActivityAttendee
+                    {
+                        AppUserId = userManager.Users.Where(u => u.Email == "tom@test.com").First().Id,
+                        AppUser = userManager.Users.Where(u => u.Email == "tom@test.com").First(),
+                        IsHost = false
+                    },
+                }
             }
         };
 

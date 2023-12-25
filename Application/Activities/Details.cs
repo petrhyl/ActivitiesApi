@@ -10,10 +10,7 @@ namespace Application.Activities;
 
 public class Details
 {
-    public class Query : IRequest<Result<ActivityResponse>>
-    {
-        public Guid Id { get; set; }
-    }
+    public record Query(Guid Id) : IRequest<Result<ActivityResponse>>;
 
     public class Handler : IRequestHandler<Query, Result<ActivityResponse>>
     {

@@ -22,7 +22,9 @@ public class Activity
 
     public required string Venue { get; set; }
 
-    public bool IsActive { get; set; } = true;
+    public required bool IsActive { get; set; } = true;
 
     public ICollection<ActivityAttendee> Attendees { get; set; } = new List<ActivityAttendee>();
+
+    public ActivityAttendee Host => Attendees.FirstOrDefault(a => a.IsHost)!;
 }

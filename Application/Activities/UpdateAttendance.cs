@@ -10,10 +10,7 @@ namespace Application.Activities;
 
 public class UpdateAttendance
 {
-    public class Command : IRequest<Result<Unit>>
-    {
-        public Guid Id { get; set; }
-    }
+    public record Command(Guid Id) : IRequest<Result<Unit>>;
 
     public class Handler : IRequestHandler<Command, Result<Unit>?>
     {
@@ -44,23 +41,18 @@ public class UpdateAttendance
                 throw new AuthenticationException("Current user is not authenticated.");
             }
 
-            var user = await _appUserRepository.GetAppUserById(currentUserId, cancellationToken);
+            var currentUser = await _appUserRepository.GetAppUserById(currentUserId, cancellationToken);
 
-            if (user is null)
+            if (currentUser is null)
             {
                 throw new ApplicationException("Authenticated user could not be found in database");
             }
 
-            var hostUsername = activity.Attendees.FirstOrDefault(at => at.IsHost)?.AppUser?.UserName;
+            var hostUsername = activity.Attendees.FirstOrDefault(at => at.IsHost)?.AppUser.UserName;
 
-            var attendance = activity.Attendees.FirstOrDefault(at => at.AppUser?.UserName == user.UserName);
-
-            if (attendance is not null && hostUsername == user.UserName)
-            {
-                activity.IsActive = !activity.IsActive;
-            }
-
-            if (attendance is not null && hostUsername != user.UserName)
+            var attendance = activity.Attendees.FirstOrDefault(at => at.AppUser.UserName == currentUser.UserName);
+                       
+            if (attendance is not null && hostUsername != currentUser.UserName)
             {
                 activity.Attendees.Remove(attendance);
             }
@@ -69,8 +61,8 @@ public class UpdateAttendance
             {
                 attendance = new ActivityAttendee
                 {
-                    AppUserId = user.Id,
-                    AppUser = user,
+                    AppUserId = currentUser.Id,
+                    AppUser = currentUser,
                     Activity = activity,
                     ActivityId = request.Id,
                     IsHost = false

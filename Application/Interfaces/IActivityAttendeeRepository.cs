@@ -10,6 +10,6 @@ public interface IActivityAttendeeRepository
 
     Task<IEnumerable<ActivityAttendee>> GetUserActivityAttendees(string userId, CancellationToken cancellationToken = default);
 
-    Task<bool> UpdateActivityAttendee(Guid activityId, string userId, CancellationToken cancellationToken = default);
+    Task<bool> AddAttendee(Guid activityId, AppUser appUser, CancellationToken cancellationToken = default);
 }
 

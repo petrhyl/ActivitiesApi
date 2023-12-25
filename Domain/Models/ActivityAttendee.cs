@@ -3,7 +3,7 @@ public class ActivityAttendee
 {
     public required string AppUserId { get; set; }
 
-    public AppUser? AppUser { get; set; }
+    public required AppUser AppUser { get; set; }
 
     public Guid ActivityId { get; set; }
 

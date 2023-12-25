@@ -29,11 +29,12 @@ public class ActivityAttendeeRepository : IActivityAttendeeRepository
         return await _dataContext.ActivityAttendees.Where(at => at.AppUserId == userId).ToListAsync(cancellationToken);
     }
 
-    public async Task<bool> UpdateActivityAttendee(Guid activityId, string userId, CancellationToken cancellationToken = default)
+    public async Task<bool> AddAttendee(Guid activityId, AppUser appUser, CancellationToken cancellationToken = default)
     {
         var attendee = new ActivityAttendee
         {
-            AppUserId = userId        ,
+            AppUserId = appUser.Id,
+            AppUser = appUser,
             ActivityId = activityId,
             IsHost = false
         };

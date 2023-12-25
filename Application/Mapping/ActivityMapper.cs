@@ -25,7 +25,14 @@ public static class ActivityMapper
             City = activity.City,
             Venue = activity.Venue,
             IsActive = activity.IsActive,
-            Attenders = attenders
+            Attenders = attenders,
+            Host = new AppUserResponse
+            {
+                Username = activity.Host.AppUser!.UserName!,
+                DisplayName = activity.Host.AppUser.DisplayName!,
+                Email = activity.Host.AppUser.Email!,
+                ImageUrl = activity.Host.AppUser.ImageUrl,
+            }
         };
     }
 
@@ -50,6 +57,7 @@ public static class ActivityMapper
             BeginDate = request.BeginDate,
             City = request.City,
             Venue = request.Venue,
+            IsActive = request.IsActive,
         };
     }
 

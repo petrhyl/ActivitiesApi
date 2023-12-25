@@ -10,10 +10,7 @@ namespace Application.Activities;
 
 public class Edit
 {
-    public class Command : IRequest<Result<Unit>>
-    {
-        public required ActivityRequest Activity { get; set; }
-    }
+    public record Command(ActivityRequest Activity) : IRequest<Result<Unit>>;
 
     public class CommandValidator : AbstractValidator<Command>
     {
@@ -52,6 +49,7 @@ public class Edit
             activity.BeginDate = request.Activity.BeginDate;
             activity.City = request.Activity.City;
             activity.Venue = request.Activity.Venue;
+            activity.IsActive = request.Activity.IsActive;
 
             var result = await _activityRepository.UpdateActivity(activity, cancellationToken);
 

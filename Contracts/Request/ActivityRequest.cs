@@ -1,6 +1,4 @@
-﻿using Contracts.Response;
-
-namespace Contracts.Request;
+﻿namespace Contracts.Request;
 
 public class ActivityRequest
 {
@@ -12,10 +10,12 @@ public class ActivityRequest
 
     public string? Description { get; init; }
 
-    public required ActivityCategoryResponse Category { get; init; }
+    public required ActivityCategoryRequest Category { get; init; }
 
     public required string City { get; init; }
 
     public required string Venue { get; init; }
+
+    public required bool IsActive { get; init; } = true;
 }
 

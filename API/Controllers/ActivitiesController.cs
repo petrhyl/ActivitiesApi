@@ -1,4 +1,5 @@
 ﻿using Application.Activities;
+using Application.ActivityCategories;
 using Application.Services.Auth;
 using Contracts.Request;
 using Domain.Models;
@@ -18,14 +19,14 @@ public class ActivitiesController : BaseApiController
     [HttpGet("{id}")]
     public async Task<IActionResult> GetActivity(Guid id, CancellationToken token)
     {
-        return ResultOfGetMethod(await Mediator.Send(new Details.Query { Id = id }, token));
+        return ResultOfGetMethod(await Mediator.Send(new Details.Query(id), token));
     }
 
     [HttpPost]
     [Authorize]
     public async Task<IActionResult> CreateActivity(ActivityRequest activity, CancellationToken token)
     {
-        return ResultOfCreateMethod(await Mediator.Send(new Create.Command { Activity = activity }, token));        
+        return ResultOfCreateMethod(await Mediator.Send(new Create.Command(activity), token));        
     }
 
     [HttpPut("{id}")]
@@ -33,20 +34,33 @@ public class ActivitiesController : BaseApiController
     public async Task<IActionResult> EditActivity([FromRoute]Guid id, [FromBody]ActivityRequest activity, CancellationToken token)
     {
         activity.Id = id;
-        return ResultOfNoContentMethod(await Mediator.Send(new Edit.Command { Activity = activity }, token));
+        return ResultOfNoContentMethod(await Mediator.Send(new Edit.Command(activity), token));
+    }
+
+    [HttpPut("cancel/{id}")]
+    [Authorize(Policy = AuthConstants.IsActivityHostPolicy)]
+    public async Task<IActionResult> CancelActivity(Guid id, CancellationToken token)
+    {
+        return ResultOfNoContentMethod(await Mediator.Send(new Cancel.Command(id), token));
     }
 
     [HttpDelete("{id}")]
     [Authorize(Policy = AuthConstants.IsActivityHostPolicy)]
     public async Task<IActionResult> DeleteActivity(Guid id, CancellationToken token)
     {
-        return ResultOfNoContentMethod((await Mediator.Send(new Delete.Command { Id = id }, token)));
+        return ResultOfNoContentMethod(await Mediator.Send(new Delete.Command(id), token));
     }
 
-    [HttpPost("{id}/attend")]
+    [HttpPut("attend/{id}")]
     [Authorize]
-    public async Task<IActionResult> AttendActivity(Guid id)
+    public async Task<IActionResult> UpdateAttendance(Guid id)
     {
-        return ResultOfNoContentMethod(await Mediator.Send(new UpdateAttendance.Command { Id = id }));
+        return ResultOfNoContentMethod(await Mediator.Send(new UpdateAttendance.Command(id)));
+    }
+
+    [HttpGet("categories")]
+    public async Task<IActionResult> GetCategories(CancellationToken token)
+    {
+        return ResultOfGetMethod(await Mediator.Send(new ActivityCategoryList.Query(), token));
     }
 }

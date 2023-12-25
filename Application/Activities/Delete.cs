@@ -6,12 +6,9 @@ namespace Application.Activities;
 
 public class Delete
 {
-    public class Command : IRequest<Result<Unit>>
-    {
-        public Guid Id { get; set; }
-    }
+    public record Command(Guid Id) : IRequest<Result<Unit>>;
 
-    public class Handler : IRequestHandler<Command, Result<Unit>?>
+    public class Handler : IRequestHandler<Command, Result<Unit>>
     {
         private readonly IActivityRepository _activityRepository;
 
@@ -20,9 +17,9 @@ public class Delete
             _activityRepository = activityRepository;
         }
 
-        public async Task<Result<Unit>?> Handle(Command request, CancellationToken cancellationToken)
+        public async Task<Result<Unit>> Handle(Command request, CancellationToken cancellationToken)
         {
-            var result = await _activityRepository.DeleteActivity(request.Id);
+            var result = await _activityRepository.DeleteActivity(request.Id, cancellationToken);
 
             if (!result)
             {

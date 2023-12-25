@@ -14,11 +14,8 @@ namespace Application.Activities;
 
 public class Create
 {
-    public class Command : IRequest<Result<Unit>>
-    {
-        public required ActivityRequest Activity { get; set; }
-    }
-
+    public record Command(ActivityRequest Activity) : IRequest<Result<Unit>>;
+    
     public class CommandValidator : AbstractValidator<Command>
     {
         public CommandValidator(IActivityRepository activityRepository)
