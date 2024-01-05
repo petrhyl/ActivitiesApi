@@ -45,7 +45,7 @@ public static class IdentityServiceExtensions
         });
         services.AddTransient<IAuthorizationHandler, IsHostRequirementHandler>();
 
-        services.AddScoped<ITokenService,TokenService>();
+        services.AddScoped<ITokenService, TokenService>();
         services.AddScoped<IAuthService, AuthService>();
 
         return services;

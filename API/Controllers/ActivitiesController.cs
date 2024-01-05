@@ -1,4 +1,5 @@
-﻿using Application.Activities;
+﻿using API.ApiEndpoints;
+using Application.Activities;
 using Application.ActivityCategories;
 using Application.Services.Auth;
 using Contracts.Request;
@@ -37,7 +38,7 @@ public class ActivitiesController : BaseApiController
         return ResultOfNoContentMethod(await Mediator.Send(new Edit.Command(activity), token));
     }
 
-    [HttpPut("cancel/{id}")]
+    [HttpPut(ActivitiesEndpoints.Cancel)]
     [Authorize(Policy = AuthConstants.IsActivityHostPolicy)]
     public async Task<IActionResult> CancelActivity(Guid id, CancellationToken token)
     {
@@ -51,14 +52,14 @@ public class ActivitiesController : BaseApiController
         return ResultOfNoContentMethod(await Mediator.Send(new Delete.Command(id), token));
     }
 
-    [HttpPut("attend/{id}")]
+    [HttpPut(ActivitiesEndpoints.Attend)]
     [Authorize]
     public async Task<IActionResult> UpdateAttendance(Guid id)
     {
         return ResultOfNoContentMethod(await Mediator.Send(new UpdateAttendance.Command(id)));
     }
 
-    [HttpGet("categories")]
+    [HttpGet(ActivitiesEndpoints.Categories)]
     public async Task<IActionResult> GetCategories(CancellationToken token)
     {
         return ResultOfGetMethod(await Mediator.Send(new ActivityCategoryList.Query(), token));

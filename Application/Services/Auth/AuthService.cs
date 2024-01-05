@@ -26,7 +26,7 @@ public class AuthService : IAuthService
 
     public async Task<Result<AppUserResponse>> LogUserIn(LoginRequest loginRequest)
     {
-        var user = await _userManager.FindByEmailAsync(loginRequest.Email);
+        var user = await _userManager.Users.Include(u => u.Photos).SingleOrDefaultAsync(u => u.UserName == loginRequest.Username);
 
         if (user is null)
         {
@@ -79,8 +79,8 @@ public class AuthService : IAuthService
         {
             return Result<AppUserResponse>.Failure("User cannot be identified.");
         }
-
-        var user = await _userManager.FindByIdAsync(userId);
+        
+        var user = await _userManager.Users.Include(u => u.Photos).SingleOrDefaultAsync(u => u.Id == userId);
 
         if (user is null)
         {

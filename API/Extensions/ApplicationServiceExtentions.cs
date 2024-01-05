@@ -1,14 +1,17 @@
 ﻿using Application.Activities;
+using Application.Services.ImageCloud;
+using CloudinaryDotNet;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using Infrastructure.Common.Persistence;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 
 namespace API.Extensions;
 
 public static class ApplicationServiceExtentions
 {
-    public static IServiceCollection AddApplicationServices(this IServiceCollection services)
+    public static IServiceCollection AddApplicationServices(this IServiceCollection services, IConfiguration config)
     {
         services.AddCors(opt =>
         {
@@ -26,6 +29,10 @@ public static class ApplicationServiceExtentions
         services.AddFluentValidationAutoValidation();
         services.AddValidatorsFromAssemblyContaining<Create>();
         services.AddHttpContextAccessor();
+
+        services.Configure<Account>(config.GetSection("Cloudinary"));
+        services.AddScoped<ICloudinary>(opt => new Cloudinary(opt.GetService<IOptions<Account>>()?.Value));
+        services.AddScoped<IImageCloudService, ImageCloudService>();
 
         return services;
     }

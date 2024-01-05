@@ -44,11 +44,6 @@ public class BaseApiController : ControllerBase
 
     protected ActionResult ResultOfCreateMethod<T>(Result<T> result)
     {
-        if (result is null)
-        {
-            return NotFound();
-        }
-
         if (result.IsScucess)
         {
             return CreatedAtAction(null, null);

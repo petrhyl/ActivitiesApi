@@ -21,7 +21,7 @@ public class AccountController : ControllerBase
         _authService = authService;
     }
 
-    [HttpPost(AccountEndpoint.Login)]
+    [HttpPost(AccountEndpoints.Login)]
     public async Task<ActionResult<AppUserResponse>> Login(LoginRequest request)
     {
         var result = await _authService.LogUserIn(request);
@@ -34,7 +34,7 @@ public class AccountController : ControllerBase
         return Ok(result.Value);
     }
 
-    [HttpPost(AccountEndpoint.RegisterUser)]
+    [HttpPost(AccountEndpoints.RegisterUser)]
     public async Task<ActionResult<AppUserResponse>> RegisterUser(RegisterRequest request)
     {
         var result = await _authService.RegisterUser(request);
@@ -47,7 +47,7 @@ public class AccountController : ControllerBase
         return Ok(result.Value);
     }
 
-    [HttpGet(AccountEndpoint.Current)]
+    [HttpGet(AccountEndpoints.Current)]
     [Authorize]
     public async Task<ActionResult<AppUserResponse>> GetCurrentUser([FromHeader(Name = "Authorization")] string? authenticationHeader)
     {
@@ -71,6 +71,6 @@ public class AccountController : ControllerBase
         }
 
         return Ok(result.Value);
-    }
+    }        
 }
 

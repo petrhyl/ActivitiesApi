@@ -26,13 +26,7 @@ public static class ActivityMapper
             Venue = activity.Venue,
             IsActive = activity.IsActive,
             Attenders = attenders,
-            Host = new AppUserResponse
-            {
-                Username = activity.Host.AppUser!.UserName!,
-                DisplayName = activity.Host.AppUser.DisplayName!,
-                Email = activity.Host.AppUser.Email!,
-                ImageUrl = activity.Host.AppUser.ImageUrl,
-            }
+            Host = activity.Host.AppUser.MapToResponse()
         };
     }
 
@@ -85,13 +79,7 @@ public static class ActivityMapper
     {
         return attendees.Select(at =>
         {
-            var attender = new AppUserResponse
-            {
-                Username = at.AppUser?.UserName!,
-                DisplayName = at.AppUser?.DisplayName!,
-                Email = at.AppUser?.Email!,
-                ImageUrl = at.AppUser?.ImageUrl
-            };
+            var attender = at.AppUser.MapToResponse();
 
             return new ActivityAttenderResponse
             {

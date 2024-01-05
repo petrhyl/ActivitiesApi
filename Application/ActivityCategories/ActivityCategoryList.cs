@@ -22,7 +22,7 @@ public class ActivityCategoryList
 
         public async Task<Result<List<ActivityCategoryResponse>>> Handle(Query request, CancellationToken cancellationToken)
         {
-            var categories = await _activityRepository.GetActivityCategories();
+            var categories = await _activityRepository.GetActivityCategories(cancellationToken);
 
             var response = categories.MapToResponse();
 

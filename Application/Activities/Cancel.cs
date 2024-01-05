@@ -20,7 +20,7 @@ public class Cancel
 
         public async Task<Result<Unit>?> Handle(Command request, CancellationToken cancellationToken)
         {
-            var activity = await _activityRepository.GetActivityById(request.Id);
+            var activity = await _activityRepository.GetActivityById(request.Id, cancellationToken);
 
             if (activity is null)
             {
