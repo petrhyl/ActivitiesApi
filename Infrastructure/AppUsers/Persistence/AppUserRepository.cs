@@ -63,7 +63,21 @@ public class AppUserRepository : IAppUserRepository
 
         if (user is null)
         {
-            throw new ArgumentException("User not found",nameof(username));
+            throw new ArgumentException("User not found", nameof(username));
+        }
+
+        return user.Photos;
+    }
+
+    public async Task<ICollection<PhotoImage>> GetUserPhotosByUserId(string userId, CancellationToken cancellationToken = default)
+    {
+        var user = await _dataContext.Users
+            .Include(u => u.Photos)
+            .SingleOrDefaultAsync(u => u.Id == userId, cancellationToken: cancellationToken);
+
+        if (user is null)
+        {
+            throw new ArgumentException("User not found by ID.");
         }
 
         return user.Photos;
@@ -71,7 +85,7 @@ public class AppUserRepository : IAppUserRepository
 
     public async Task<bool> DeleteUserPhoto(string photoId, string userId, CancellationToken cancellationToken = default)
     {
-        var photos = await GetUserPhotos(userId, cancellationToken);
+        var photos = await GetUserPhotosByUserId(userId, cancellationToken);
 
         var photo = photos.FirstOrDefault(p => p.Id == photoId);
 
@@ -89,7 +103,7 @@ public class AppUserRepository : IAppUserRepository
 
     public async Task<bool> SetUserMainPhoto(string photoId, string userId, CancellationToken cancellationToken = default)
     {
-        var photos = await GetUserPhotos(userId, cancellationToken);
+        var photos = await GetUserPhotosByUserId(userId, cancellationToken);
 
         var previousMainPhoto = photos.FirstOrDefault(p => p.IsMain);
 
@@ -102,6 +116,11 @@ public class AppUserRepository : IAppUserRepository
 
         if (previousMainPhoto is not null)
         {
+            if (previousMainPhoto.Id == photo.Id)
+            {
+                return true;
+            }
+
             previousMainPhoto.IsMain = false;
         }
 

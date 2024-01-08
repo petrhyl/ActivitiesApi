@@ -22,6 +22,7 @@ public class ActivityRepository : IActivityRepository
             .Include(a => a.ActivityCategory)
             .Include(a => a.Attendees)
             .ThenInclude(at => at.AppUser)
+            .ThenInclude(u => u.Photos.Where(p => p.IsMain))
             .ToListAsync(cancellationToken);
     }
 
@@ -31,6 +32,7 @@ public class ActivityRepository : IActivityRepository
             .Include(a => a.ActivityCategory)
             .Include(a => a.Attendees)
             .ThenInclude(at => at.AppUser)
+            .ThenInclude(u => u.Photos.Where(p => p.IsMain))
             .SingleOrDefaultAsync(a => a.Id == id, cancellationToken);
     }
 

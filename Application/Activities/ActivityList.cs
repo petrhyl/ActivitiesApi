@@ -29,8 +29,6 @@ public class ActivityList
 
             var activityList = activities.OrderByDescending(a => a.BeginDate).ToList();
 
-            var currentUserId = _authService.GetCurrentUserId();
-
             var response = activityList.MapToResponse();
 
             return Result<List<ActivityResponse>>.Success(response.ToList());
