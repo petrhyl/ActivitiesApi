@@ -80,4 +80,21 @@ public class ActivityRepository : IActivityRepository
     {
         return await _dataContext.ActivityCategories.ToListAsync(cancellationToken);
     }
+
+    public async Task<bool> CreateChatPost(Activity activity, ChatPost chatPost, CancellationToken cancellationToken = default)
+    {
+        activity.Posts.Add(chatPost);
+
+        var result = await _dataContext.SaveChangesAsync(cancellationToken);
+
+        return result > 0;
+    }
+
+    public async Task<IEnumerable<ChatPost>> GetChatPostsOfActivity(Guid activityId, CancellationToken cancellationToken = default)
+    {
+        return await _dataContext.ChatPosts
+            .Where(p => p.Activity.Id == activityId)
+            .OrderBy(p => p.CreatedAt)
+            .ToListAsync(cancellationToken);
+    }
 }

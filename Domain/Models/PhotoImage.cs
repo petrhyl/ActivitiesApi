@@ -4,7 +4,7 @@ public class PhotoImage
 {
     public string? Id { get; set; }
 
-    public string? AppUserId { get; set; }
+    public required string AppUserId { get; set; }
 
     public required string Url { get; set; }
 

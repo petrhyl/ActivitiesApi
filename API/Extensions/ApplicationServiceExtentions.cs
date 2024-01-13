@@ -33,6 +33,7 @@ public static class ApplicationServiceExtentions
         services.Configure<Account>(config.GetSection("Cloudinary"));
         services.AddScoped<ICloudinary>(opt => new Cloudinary(opt.GetService<IOptions<Account>>()?.Value));
         services.AddScoped<IImageCloudService, ImageCloudService>();
+        services.AddSignalR();
 
         return services;
     }

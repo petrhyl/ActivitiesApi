@@ -18,6 +18,8 @@ public class DataContext : IdentityDbContext<AppUser>
 
     public DbSet<PhotoImage> PhotoImages { get; set; }
 
+    public DbSet<ChatPost> ChatPosts { get; set; }
+
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
@@ -34,5 +36,10 @@ public class DataContext : IdentityDbContext<AppUser>
             .HasOne(at => at.Activity)
             .WithMany(a => a.Attendees)
             .HasForeignKey(at => at.ActivityId);
+
+        builder.Entity<ChatPost>()
+            .HasOne(c => c.Activity)
+            .WithMany(a => a.Posts)
+            .OnDelete(DeleteBehavior.Cascade);
     }
 }

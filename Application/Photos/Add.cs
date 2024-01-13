@@ -39,7 +39,7 @@ public class Add
 
             var photoUploadResult = await _imageCloudService.AddImage(request.UserPhoto.File);
 
-            var photo = photoUploadResult.MapToPhotoImage(request.UserPhoto.IsMain, DateTime.Now);
+            var photo = photoUploadResult.MapToPhotoImage(request.UserPhoto.IsMain, DateTime.Now, currentUserId);
 
             var result = await _appUserRepository.AddUserPhoto(currentUserId, photo, cancellationToken);
 

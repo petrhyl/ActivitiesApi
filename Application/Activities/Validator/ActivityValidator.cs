@@ -21,7 +21,7 @@ public class ActivityValidator : AbstractValidator<ActivityRequest>
 
     private bool IsCategoryIdValid(Guid categoryId)
     {
-        var categories = _activityRepository.GetActivityCategories().Result;
+        var categories = _activityRepository.GetActivityCategories().GetAwaiter().GetResult();
 
         var result = categories.FirstOrDefault(c => c.Id == categoryId);
 

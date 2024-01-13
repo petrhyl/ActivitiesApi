@@ -1,6 +1,7 @@
 ﻿using Application.Interfaces;
 using Domain.Models;
 using Infrastructure.Common.Persistence;
+using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.AppUsers.Persistence;
@@ -20,6 +21,24 @@ public class AppUserRepository : IAppUserRepository
             .Include(u => u.Photos.Where(p => p.IsMain))
             .SingleOrDefaultAsync(u => u.Id == id, cancellationToken: cancellationToken);
     }
+
+    public async Task<bool> UpdateAppUser(AppUser appUser, CancellationToken cancellationToken = default) { 
+        var user = await GetAppUserById(appUser.Id, cancellationToken);
+
+        if (user is null)
+        {
+            throw new ApplicationException("User was not found by ID");
+        }
+
+        user.DisplayName = appUser.DisplayName;
+        user.Email = appUser.Email;
+        user.Bio = appUser.Bio;
+
+        await _dataContext.SaveChangesAsync(cancellationToken);
+
+        return true;
+    }
+    
 
     public async Task<bool> AddUserPhoto(string userId, PhotoImage photo, CancellationToken cancellationToken = default)
     {

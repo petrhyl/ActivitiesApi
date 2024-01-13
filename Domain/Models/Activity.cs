@@ -27,4 +27,6 @@ public class Activity
     public ICollection<ActivityAttendee> Attendees { get; set; } = new List<ActivityAttendee>();
 
     public ActivityAttendee Host => Attendees.FirstOrDefault(a => a.IsHost)!;
+
+    public ICollection<ChatPost> Posts { get; set; } = new List<ChatPost>();
 }

@@ -1,5 +1,7 @@
+using API.ApiEndpoints;
 using API.Extensions;
 using API.Middleware;
+using API.SignalR;
 using Domain.Models;
 using Infrastructure.Common.Persistence;
 using Microsoft.AspNetCore.Identity;
@@ -36,6 +38,7 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+app.MapHub<ChatHub>(SignalREndpoints.ActivityChat);
 
 using var scope = app.Services.CreateScope();
 var dbContext = scope.ServiceProvider.GetRequiredService<DataContext>();

@@ -14,6 +14,10 @@ public interface IActivityRepository
 
     Task<bool> UpdateActivity(Activity activity, CancellationToken cancellationToken = default);
 
-    Task<bool> DeleteActivity(Guid id, CancellationToken cancellationToken = default);    
+    Task<bool> DeleteActivity(Guid id, CancellationToken cancellationToken = default);
+
+    Task<bool> CreateChatPost(Activity activity, ChatPost chatPost, CancellationToken cancellationToken = default);
+
+    Task<IEnumerable<ChatPost>> GetChatPostsOfActivity(Guid activityId, CancellationToken cancellationToken = default);
 }
 

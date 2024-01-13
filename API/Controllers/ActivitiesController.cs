@@ -1,6 +1,7 @@
 ﻿using API.ApiEndpoints;
 using Application.Activities;
 using Application.ActivityCategories;
+using Application.ChatPosts;
 using Application.Services.Auth;
 using Contracts.Request;
 using Domain.Models;
@@ -54,14 +55,20 @@ public class ActivitiesController : BaseApiController
 
     [HttpPut(ActivitiesEndpoints.Attend)]
     [Authorize]
-    public async Task<IActionResult> UpdateAttendance(Guid id)
+    public async Task<IActionResult> UpdateAttendance(Guid id, CancellationToken token)
     {
-        return ResultOfNoContentMethod(await Mediator.Send(new UpdateAttendance.Command(id)));
+        return ResultOfNoContentMethod(await Mediator.Send(new UpdateAttendance.Command(id), token));
     }
 
     [HttpGet(ActivitiesEndpoints.Categories)]
     public async Task<IActionResult> GetCategories(CancellationToken token)
     {
         return ResultOfGetMethod(await Mediator.Send(new ActivityCategoryList.Query(), token));
+    }
+
+    [HttpGet(ActivitiesEndpoints.ChatPosts)]
+    public async Task<IActionResult> GetChatPosts(Guid id, CancellationToken token)
+    {
+        return ResultOfGetMethod(await Mediator.Send(new ChatPostList.Query(id), token));
     }
 }

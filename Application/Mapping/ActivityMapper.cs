@@ -87,6 +87,6 @@ public static class ActivityMapper
                 IsHost = at.IsHost
             };
         });
-    }
+    }   
 }
 

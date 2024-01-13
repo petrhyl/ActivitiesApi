@@ -6,6 +6,8 @@ public interface IAppUserRepository
 {
     Task<AppUser?> GetAppUserById(string id, CancellationToken cancellationToken = default);
 
+    Task<bool> UpdateAppUser(AppUser user, CancellationToken cancellationToken = default);
+
     Task<bool> AddUserPhoto(string userId, PhotoImage photo, CancellationToken cancellationToken = default);
 
     Task<PhotoImage?> GetUserPhotoById(string photoId, string userId, CancellationToken cancellationToken = default);
