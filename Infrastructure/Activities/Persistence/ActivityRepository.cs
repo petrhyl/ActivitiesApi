@@ -94,7 +94,9 @@ public class ActivityRepository : IActivityRepository
     {
         return await _dataContext.ChatPosts
             .Where(p => p.Activity.Id == activityId)
-            .OrderBy(p => p.CreatedAt)
+            .Include(p => p.Author)
+            .ThenInclude(a => a.Photos.Where(m => m.IsMain))
+            .OrderByDescending(p => p.CreatedAt)
             .ToListAsync(cancellationToken);
     }
 }

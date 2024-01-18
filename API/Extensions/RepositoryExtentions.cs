@@ -4,6 +4,7 @@ using Infrastructure.ActivityAttendees.Persistence;
 using Infrastructure.AppUsers.Persistence;
 using Infrastructure.Common.Persistence;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 
 namespace API.Extensions;
 

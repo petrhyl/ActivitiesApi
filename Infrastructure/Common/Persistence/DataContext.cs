@@ -41,5 +41,5 @@ public class DataContext : IdentityDbContext<AppUser>
             .HasOne(c => c.Activity)
             .WithMany(a => a.Posts)
             .OnDelete(DeleteBehavior.Cascade);
-    }
+    }    
 }

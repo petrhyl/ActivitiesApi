@@ -15,7 +15,7 @@ public static class ChatPostMapper
             CreatedAt = chatPost.CreatedAt,
             UserName = chatPost.Author.UserName!,
             DisplayName = chatPost.Author.DisplayName,
-            UserImage = chatPost.Author.MainPhoto?.Url
+            UserImage = chatPost.Author.MainPhoto?.Url ?? string.Empty
         };
     }
 
@@ -31,9 +31,11 @@ public static class ChatPostMapper
 
     public static IEnumerable<ChatPostResponse> MapToRespnse(this IEnumerable<ChatPost> chatPosts)
     {
-        return chatPosts.Select(ch =>
+        var sel = chatPosts.Select(ch =>
         {
             return ch.MapToResponse();
         });
+
+        return sel;
     }
 }

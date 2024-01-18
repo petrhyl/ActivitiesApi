@@ -4,7 +4,9 @@ using API.Middleware;
 using API.SignalR;
 using Domain.Models;
 using Infrastructure.Common.Persistence;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using static System.Net.Mime.MediaTypeNames;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -39,6 +41,7 @@ app.UseAuthorization();
 
 app.MapControllers();
 app.MapHub<ChatHub>(SignalREndpoints.ActivityChat);
+
 
 using var scope = app.Services.CreateScope();
 var dbContext = scope.ServiceProvider.GetRequiredService<DataContext>();

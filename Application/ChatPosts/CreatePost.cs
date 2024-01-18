@@ -1,4 +1,5 @@
-﻿using Application.Interfaces;
+﻿using Application.ChatPosts.Providers;
+using Application.Interfaces;
 using Application.Mapping;
 using Application.Services.Auth;
 using Contracts.Request;
@@ -6,6 +7,7 @@ using Contracts.Response;
 using Domain.Core;
 using FluentValidation;
 using MediatR;
+using Microsoft.AspNetCore.SignalR;
 
 namespace Application.ChatPosts;
 
@@ -27,7 +29,9 @@ public class CreatePost
         private readonly IAppUserRepository _appUserRepository;
         private readonly IActivityRepository _activityRepository;
 
-        public Handler(IAuthService authService, IActivityRepository activityRepository, IAppUserRepository appUserRepository)
+        public Handler(IAuthService authService, 
+            IActivityRepository activityRepository, 
+            IAppUserRepository appUserRepository)
         {
             _authService = authService;
             _activityRepository = activityRepository;
@@ -54,12 +58,12 @@ public class CreatePost
 
             if (activity is null)
             {
-                return null;
+                return Result<ChatPostResponse>.Failure("Activity of a post was not found."); ;
             }
 
             var post = request.ChatPost.MapToChatPost(user, activity);
 
-            var result = await _activityRepository.CreateChatPost(activity, post , cancellationToken);
+            var result = await _activityRepository.CreateChatPost(activity, post, cancellationToken);
 
             if (result == false)
             {

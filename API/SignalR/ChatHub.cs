@@ -1,23 +1,34 @@
-﻿using Application.ChatPosts;
+﻿using API.SignalR.Providers;
+using Application.ChatPosts;
+using Application.Services.Auth;
+using Contracts.Request;
 using MediatR;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
+using System.Security.Claims;
 
 namespace API.SignalR;
 
-public class ChatHub : Hub { 
-private readonly IMediator _mediator;
+[Authorize]
+public class ChatHub : Hub
+{
+    private readonly IMediator _mediator;
+    private readonly IAuthService _authService;
 
-    public ChatHub(IMediator mediator)
+    public ChatHub(IMediator mediator, IAuthService authService)
     {
         _mediator = mediator;
+        _authService = authService;
     }
 
-    public async Task SendChatPost(CreatePost.Command command)
+    public async Task SendChatPost(ChatPostRequest request)
     {
-        var post = await _mediator.Send(command);
+        var post = await _mediator.Send(new CreatePost.Command(request));
 
-        await Clients.Group(command.ChatPost.ActivityId.ToString())
-            .SendAsync("ReceiveChatPosts", post);
+        await Clients
+            .Group(request.ActivityId.ToString())
+            .SendAsync("ReceiveChatPost", post.Value);
     }
 
     public override async Task OnConnectedAsync()
@@ -28,7 +39,9 @@ private readonly IMediator _mediator;
 
         if (activityId is null)
         {
-            throw new BadHttpRequestException("ID of activity is not provided in URL query", 400);
+            await Clients.Caller.SendAsync("LoadChatPosts", "Not provided activity ID.");
+
+            return;
         }
 
         await Groups.AddToGroupAsync(Context.ConnectionId, activityId.Value!);
