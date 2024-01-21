@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Domain.Models;
 using Application.Services.Auth;
 using System.Security.Authentication;
-using Application.Interfaces;
+using Application.Repositories;
 
 namespace Application.Activities;
 

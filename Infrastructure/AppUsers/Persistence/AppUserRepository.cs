@@ -1,4 +1,4 @@
-﻿using Application.Interfaces;
+﻿using Application.Repositories;
 using Domain.Models;
 using Infrastructure.Common.Persistence;
 using MediatR;
@@ -19,10 +19,16 @@ public class AppUserRepository : IAppUserRepository
     {
         return await _dataContext.Users
             .Include(u => u.Photos.Where(p => p.IsMain))
+            .AsSplitQuery()
+            .Include(us => us.Followers)
+                .ThenInclude(uf => uf.Follower)
+            .Include(us => us.Followings)
+                .ThenInclude(uf => uf.Followee)
             .SingleOrDefaultAsync(u => u.Id == id, cancellationToken: cancellationToken);
     }
 
-    public async Task<bool> UpdateAppUser(AppUser appUser, CancellationToken cancellationToken = default) { 
+    public async Task<bool> UpdateAppUser(AppUser appUser, CancellationToken cancellationToken = default)
+    {
         var user = await GetAppUserById(appUser.Id, cancellationToken);
 
         if (user is null)
@@ -38,7 +44,7 @@ public class AppUserRepository : IAppUserRepository
 
         return true;
     }
-    
+
 
     public async Task<bool> AddUserPhoto(string userId, PhotoImage photo, CancellationToken cancellationToken = default)
     {
@@ -154,6 +160,53 @@ public class AppUserRepository : IAppUserRepository
     {
         return await _dataContext.Users
             .Include(u => u.Photos.Where(p => p.IsMain))
+            .AsSplitQuery()
+            .Include(us => us.Followers)
+            .ThenInclude(uf => uf.Follower)
+            .Include(us => us.Followings)
+            .ThenInclude(uf => uf.Followee)
             .SingleOrDefaultAsync(u => u.UserName == username, cancellationToken: cancellationToken);
+    }
+
+    public async Task<bool> UpdateFollowee(AppUser followee, AppUser follower, CancellationToken cancellationToken = default)
+    {
+        var following = await _dataContext.UserFollowings.FindAsync(follower.Id, followee.Id, cancellationToken);
+
+        if (following is null)
+        {
+            following = new UserFollowing
+            {
+                Follower = follower,
+                FollowerId = follower.Id,
+                Followee = followee,
+                FolloweeId = followee.Id
+            };
+
+            _dataContext.UserFollowings.Add(following);
+        }
+        else
+        {
+            _dataContext.UserFollowings.Remove(following);
+        }
+
+        var result = await _dataContext.SaveChangesAsync();
+
+        return result > 0;
+    }
+
+    public async Task<IEnumerable<AppUser>> GetUserFollowees(string username, CancellationToken cancellationToken = default)
+    {
+        return await _dataContext.UserFollowings  
+            .Where(f => f.Follower.UserName == username)
+            .Select(f => f.Followee)
+            .ToListAsync(cancellationToken);
+    }
+
+    public async Task<IEnumerable<AppUser>> GetUserFollowers(string username, CancellationToken cancellationToken = default)
+    {
+        return await _dataContext.UserFollowings
+            .Where(f => f.Followee.UserName == username)
+            .Select(f => f.Follower)
+            .ToListAsync(cancellationToken);
     }
 }

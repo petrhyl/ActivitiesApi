@@ -1,6 +1,6 @@
 ﻿namespace Contracts.Response;
 
-public class UserProfileResponse
+public class ProfileResponse
 {
     public required string DisplayName { get; init; }
 
@@ -11,4 +11,10 @@ public class UserProfileResponse
     public required string Bio { get; init; }
 
     public required string ImageUrl { get; set; }
+
+    public bool IsCurrentUserFollowing { get; set; }
+
+    public required long FollowersCount { get; set; }
+
+    public required long FollowingsCount { get; set; }
 }

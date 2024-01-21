@@ -1,4 +1,4 @@
-﻿using Application.Interfaces;
+﻿using Application.Repositories;
 using Domain.Core;
 using MediatR;
 

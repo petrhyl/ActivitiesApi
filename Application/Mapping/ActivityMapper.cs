@@ -6,9 +6,9 @@ namespace Application.Mapping;
 
 public static class ActivityMapper
 {
-    public static ActivityResponse MapToResponse(this Activity activity)
+    public static ActivityResponse MapToResponse(this Activity activity, string? currentUsername)
     {
-        var attenders = activity.Attendees.MapToResponse();
+        var attenders = activity.Attendees.MapToResponse(currentUsername);
 
         return new ActivityResponse
         {
@@ -26,7 +26,7 @@ public static class ActivityMapper
             Venue = activity.Venue,
             IsActive = activity.IsActive,
             Attenders = attenders,
-            Host = activity.Host.AppUser.MapToResponse()
+            Host = activity.Host.AppUser.MapToProfileWithoutFollowing()
         };
     }
 
@@ -70,16 +70,17 @@ public static class ActivityMapper
         return activity;
     }
 
-    public static IEnumerable<ActivityResponse> MapToResponse(this IEnumerable<Activity> activities)
+    public static IEnumerable<ActivityResponse> MapToResponse(this IEnumerable<Activity> activities, string? currentUsername)
     {
-        return activities.Select(a => a.MapToResponse());
+        return activities.Select(a => a.MapToResponse(currentUsername));
     }
 
-    public static IEnumerable<ActivityAttenderResponse> MapToResponse(this ICollection<ActivityAttendee> attendees)
+    public static IEnumerable<ActivityAttenderResponse> MapToResponse(this ICollection<ActivityAttendee> attendees, string? currentUsername)
     {
         return attendees.Select(at =>
         {
-            var attender = at.AppUser.MapToResponse();
+            var attender = at.AppUser.MapToProfileWithoutFollowing();
+            attender.IsCurrentUserFollowing = at.AppUser.Followers.Any(f => f.Follower is not null && f.Follower.UserName == currentUsername);
 
             return new ActivityAttenderResponse
             {
@@ -87,6 +88,6 @@ public static class ActivityMapper
                 IsHost = at.IsHost
             };
         });
-    }   
+    }
 }
 

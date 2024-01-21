@@ -1,4 +1,4 @@
-﻿using Application.Interfaces;
+﻿using Application.Repositories;
 using Application.Mapping;
 using Application.Services.Auth;
 using Application.Services.ImageCloud;

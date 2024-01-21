@@ -1,4 +1,4 @@
-﻿using Application.Interfaces;
+﻿using Application.Repositories;
 using Application.Mapping;
 using Contracts.Response;
 using Domain.Core;

@@ -34,18 +34,40 @@ public static class UserMapper
             Email = register.Email,
             UserName = register.UserName
         };
-    }   
+    }
 
-    public static UserProfileResponse MapToProfile(this AppUser user)
+    public static ProfileResponse MapToProfile(this AppUser user, string? currentUsername)
     {
-        return new UserProfileResponse
+        return new ProfileResponse
         {
             Username = user.UserName!,
             DisplayName = user.DisplayName ?? string.Empty,
             Email = user.Email!,
             Bio = user.Bio ?? string.Empty,
             ImageUrl = user.MainPhoto?.Url ?? string.Empty,
+            FollowingsCount = user.Followings.Count,
+            FollowersCount = user.Followers.Count,
+            IsCurrentUserFollowing = user.Followers.Any(f => f.Follower.UserName == currentUsername),
         };
+    }
+
+    public static ProfileResponse MapToProfileWithoutFollowing(this AppUser user)
+    {
+        return new ProfileResponse
+        {
+            Username = user.UserName!,
+            DisplayName = user.DisplayName ?? string.Empty,
+            Email = user.Email!,
+            Bio = user.Bio ?? string.Empty,
+            ImageUrl = user.MainPhoto?.Url ?? string.Empty,
+            FollowingsCount = user.Followings.Count,
+            FollowersCount = user.Followers.Count
+        };
+    }
+
+    public static IEnumerable<ProfileResponse> MapToProfiles(this IEnumerable<AppUser> users, string? currentUsername)
+    {
+        return users.Select(u => u.MapToProfile(currentUsername));
     }
 }
 

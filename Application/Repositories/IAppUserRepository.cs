@@ -1,6 +1,6 @@
 ﻿using Domain.Models;
 
-namespace Application.Interfaces;
+namespace Application.Repositories;
 
 public interface IAppUserRepository
 {
@@ -19,5 +19,11 @@ public interface IAppUserRepository
     Task<bool> SetUserMainPhoto(string photoId, string userId, CancellationToken cancellationToken = default);
 
     Task<AppUser?> GetUserByUsername(string username, CancellationToken cancellationToken = default);
+
+    Task<bool> UpdateFollowee(AppUser followee, AppUser follower, CancellationToken cancellationToken = default);
+
+    Task<IEnumerable<AppUser>> GetUserFollowees(string username, CancellationToken cancellationToken = default);
+
+    Task<IEnumerable<AppUser>> GetUserFollowers(string username, CancellationToken cancellationToken = default);
 }
 

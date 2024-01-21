@@ -1,4 +1,4 @@
-﻿using Application.Interfaces;
+﻿using Application.Repositories;
 using Domain.Models;
 using Infrastructure.Common.Persistence;
 using MediatR;
@@ -9,10 +9,12 @@ namespace Infrastructure.Activities.Persistence;
 public class ActivityRepository : IActivityRepository
 {
     private readonly DataContext _dataContext;
+    private readonly IActivityAttendeeRepository _attendeeRepository;
 
-    public ActivityRepository(DataContext dataContext)
+    public ActivityRepository(DataContext dataContext, IActivityAttendeeRepository attendeeRepository)
     {
         _dataContext = dataContext;
+        _attendeeRepository = attendeeRepository;
     }
 
 
@@ -20,19 +22,32 @@ public class ActivityRepository : IActivityRepository
     {
         return await _dataContext.Activities
             .Include(a => a.ActivityCategory)
+            .AsSplitQuery()
             .Include(a => a.Attendees)
-            .ThenInclude(at => at.AppUser)
-            .ThenInclude(u => u.Photos.Where(p => p.IsMain))
+                .ThenInclude(at => at.AppUser)
+                    .ThenInclude(u => u.Photos.Where(p => p.IsMain))
             .ToListAsync(cancellationToken);
     }
 
-    public Task<Activity?> GetActivityById(Guid id, CancellationToken cancellationToken = default)
+    public async Task<Activity?> GetActivityById(Guid id, CancellationToken cancellationToken = default)
+    {
+        var activity = await GetOnlyActivityDetailsById(id, cancellationToken);
+
+        if (activity is null)
+        {
+            return null;
+        }
+
+        var attendees = await _attendeeRepository.GetActivityAttendees(id, cancellationToken);
+        activity.Attendees = attendees;
+
+        return activity;
+    }
+
+    public Task<Activity?> GetOnlyActivityDetailsById(Guid id, CancellationToken cancellationToken = default)
     {
         return _dataContext.Activities
             .Include(a => a.ActivityCategory)
-            .Include(a => a.Attendees)
-            .ThenInclude(at => at.AppUser)
-            .ThenInclude(u => u.Photos.Where(p => p.IsMain))
             .SingleOrDefaultAsync(a => a.Id == id, cancellationToken);
     }
 
@@ -45,7 +60,7 @@ public class ActivityRepository : IActivityRepository
 
     public async Task<bool> UpdateActivity(Activity activity, CancellationToken cancellationToken = default)
     {
-        var previousActivity = await GetActivityById(activity.Id!.Value, cancellationToken);
+        var previousActivity = await GetOnlyActivityDetailsById(activity.Id!.Value, cancellationToken);
 
         if (previousActivity is null)
         {
@@ -64,7 +79,7 @@ public class ActivityRepository : IActivityRepository
 
     public async Task<bool> DeleteActivity(Guid id, CancellationToken cancellationToken = default)
     {
-        var activity = await GetActivityById(id, cancellationToken);
+        var activity = await GetOnlyActivityDetailsById(id, cancellationToken);
 
         if (activity is null)
         {

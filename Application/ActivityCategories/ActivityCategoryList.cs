@@ -3,7 +3,7 @@ using Application.Mapping;
 using Contracts.Response;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using Application.Interfaces;
+using Application.Repositories;
 
 namespace Application.ActivityCategories;
 

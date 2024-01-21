@@ -1,12 +1,14 @@
 ﻿using Domain.Models;
 
-namespace Application.Interfaces;
+namespace Application.Repositories;
 
 public interface IActivityRepository
 {
     Task<IEnumerable<Activity>> GetActivities(CancellationToken cancellationToken = default);
 
     Task<Activity?> GetActivityById(Guid id, CancellationToken cancellationToken = default);
+
+    Task<Activity?> GetOnlyActivityDetailsById(Guid id, CancellationToken cancellationToken = default);
 
     Task<IEnumerable<ActivityCategory>> GetActivityCategories(CancellationToken cancellationToken = default);
 

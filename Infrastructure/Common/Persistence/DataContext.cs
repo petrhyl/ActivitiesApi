@@ -20,6 +20,8 @@ public class DataContext : IdentityDbContext<AppUser>
 
     public DbSet<ChatPost> ChatPosts { get; set; }
 
+    public DbSet<UserFollowing> UserFollowings { get; set; }
+
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
@@ -41,5 +43,20 @@ public class DataContext : IdentityDbContext<AppUser>
             .HasOne(c => c.Activity)
             .WithMany(a => a.Posts)
             .OnDelete(DeleteBehavior.Cascade);
-    }    
+
+        builder.Entity<UserFollowing>(t =>
+        {
+            t.HasKey(f => new { f.FollowerId, f.FolloweeId });
+
+            t.HasOne(f => f.Follower)
+                .WithMany(r => r.Followings)
+                .HasForeignKey(r => r.FollowerId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            t.HasOne(f => f.Followee)
+                .WithMany(r => r.Followers)
+                .HasForeignKey(r => r.FolloweeId)
+                .OnDelete(DeleteBehavior.Cascade);
+        });
+    }
 }

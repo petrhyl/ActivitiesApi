@@ -3,7 +3,7 @@ using Application.Mapping;
 using Contracts.Response;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using Application.Interfaces;
+using Application.Repositories;
 using Application.Services.Auth;
 
 namespace Application.Activities;
@@ -29,7 +29,7 @@ public class ActivityList
 
             var activityList = activities.OrderByDescending(a => a.BeginDate).ToList();
 
-            var response = activityList.MapToResponse();
+            var response = activityList.MapToResponse(_authService.GetCurrentUserUsername());
 
             return Result<List<ActivityResponse>>.Success(response.ToList());
         }

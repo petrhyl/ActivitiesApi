@@ -4,7 +4,7 @@ using Application.Mapping;
 using Contracts.Request;
 using FluentValidation;
 using MediatR;
-using Application.Interfaces;
+using Application.Repositories;
 
 namespace Application.Activities;
 
@@ -36,7 +36,7 @@ public class Edit
                 return Result<Unit>.Failure("Activity ID is not provided");
             }
 
-            var activity = await _activityRepository.GetActivityById(request.Activity.Id!.Value, cancellationToken);
+            var activity = await _activityRepository.GetOnlyActivityDetailsById(request.Activity.Id!.Value, cancellationToken);
 
             if (activity is null)
             {

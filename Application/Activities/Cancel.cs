@@ -1,4 +1,4 @@
-﻿using Application.Interfaces;
+﻿using Application.Repositories;
 using Contracts.Response;
 using Domain.Core;
 using MediatR;
@@ -20,7 +20,7 @@ public class Cancel
 
         public async Task<Result<Unit>?> Handle(Command request, CancellationToken cancellationToken)
         {
-            var activity = await _activityRepository.GetActivityById(request.Id, cancellationToken);
+            var activity = await _activityRepository.GetOnlyActivityDetailsById(request.Id, cancellationToken);
 
             if (activity is null)
             {

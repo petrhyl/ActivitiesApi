@@ -1,5 +1,5 @@
 ﻿using Application.ChatPosts.Providers;
-using Application.Interfaces;
+using Application.Repositories;
 using Application.Mapping;
 using Application.Services.Auth;
 using Contracts.Request;
@@ -54,7 +54,7 @@ public class CreatePost
                 throw new ApplicationException("Authenticated user is not found in database.");
             }
 
-            var activity = await _activityRepository.GetActivityById(request.ChatPost.ActivityId, cancellationToken);
+            var activity = await _activityRepository.GetOnlyActivityDetailsById(request.ChatPost.ActivityId, cancellationToken);
 
             if (activity is null)
             {

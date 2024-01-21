@@ -20,6 +20,6 @@ public class ActivityResponse
 
     public required IEnumerable<ActivityAttenderResponse> Attenders { get; init; } = Enumerable.Empty<ActivityAttenderResponse>();
 
-    public required AppUserResponse Host {get; init; }
+    public required ProfileResponse Host {get; init; }
 }
 

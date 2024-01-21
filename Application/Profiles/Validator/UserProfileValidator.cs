@@ -1,4 +1,4 @@
-﻿using Application.Interfaces;
+﻿using Application.Repositories;
 using Application.Services.Auth;
 using Contracts.Request;
 using Contracts.Response;
@@ -6,7 +6,7 @@ using FluentValidation;
 
 namespace Application.Profiles.Validator;
 
-public class UserProfileValidator : AbstractValidator<UserProfileRequest>
+public class UserProfileValidator : AbstractValidator<ProfileRequest>
 {
 
     public UserProfileValidator(IAuthService authService)

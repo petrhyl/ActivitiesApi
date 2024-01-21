@@ -95,5 +95,10 @@ public class AuthService : IAuthService
     {
         return _httpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
     }
+
+    public string? GetCurrentUserUsername()
+    {
+        return _httpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.Name);
+    }
 }
 

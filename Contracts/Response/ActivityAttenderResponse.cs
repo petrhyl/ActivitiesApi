@@ -2,7 +2,7 @@
 
 public class ActivityAttenderResponse
 {
-    public required AppUserResponse Attender { get; set; }
+    public required ProfileResponse Attender { get; set; }
 
     public required bool IsHost { get; set; }
 }

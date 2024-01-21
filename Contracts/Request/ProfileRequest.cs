@@ -1,6 +1,6 @@
 ﻿namespace Contracts.Request;
 
-public class UserProfileRequest
+public class ProfileRequest
 {
     public required string Username { get; init; }
 

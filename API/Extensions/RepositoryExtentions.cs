@@ -1,4 +1,4 @@
-﻿using Application.Interfaces;
+﻿using Application.Repositories;
 using Infrastructure.Activities.Persistence;
 using Infrastructure.ActivityAttendees.Persistence;
 using Infrastructure.AppUsers.Persistence;

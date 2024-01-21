@@ -14,4 +14,6 @@ public interface IAuthService
     Task<Result<AppUserResponse>> GetCurrentUser(string token);
 
     string? GetCurrentUserId();
+
+    string? GetCurrentUserUsername();
 }

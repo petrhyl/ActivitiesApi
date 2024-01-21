@@ -1,5 +1,5 @@
 ﻿using Application.Activities.Validator;
-using Application.Interfaces;
+using Application.Repositories;
 using Application.Profiles.Validator;
 using Application.Services.Auth;
 using Contracts.Request;
@@ -11,7 +11,7 @@ namespace Application.Profiles;
 
 public class Edit
 {
-    public record Command(UserProfileRequest UserProfile) : IRequest<Result<Unit>>;
+    public record Command(ProfileRequest UserProfile) : IRequest<Result<Unit>>;
 
     public class CommandValidator : AbstractValidator<Command>
     {

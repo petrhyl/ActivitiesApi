@@ -1,4 +1,4 @@
-﻿using Application.Interfaces;
+﻿using Application.Repositories;
 using Domain.Models;
 using Infrastructure.Common.Persistence;
 using Microsoft.EntityFrameworkCore;
@@ -19,12 +19,24 @@ public class ActivityAttendeeRepository : IActivityAttendeeRepository
         return await _dataContext.ActivityAttendees.FindAsync(new object[] { userId, activityId }, cancellationToken: cancellationToken);
     }
 
-    public async Task<IEnumerable<ActivityAttendee>> GetActivityAttendees(Guid activityId, CancellationToken cancellationToken = default)
+    public async Task<ICollection<ActivityAttendee>> GetActivityAttendees(Guid activityId, CancellationToken cancellationToken = default)
     {
-        return await _dataContext.ActivityAttendees.Where(at => at.ActivityId == activityId).ToListAsync(cancellationToken);
+        return await _dataContext.ActivityAttendees
+            .Where(at => at.ActivityId == activityId)
+            .Include(at => at.AppUser)            
+                .ThenInclude(u => u.Followers)
+                    .ThenInclude(f => f.Follower)
+            .AsSplitQuery()
+            .Include(at => at.AppUser)
+                .ThenInclude(u => u.Followings)
+                    .ThenInclude(f => f.Followee)
+            .AsSplitQuery()
+            .Include(at => at.AppUser)
+                    .ThenInclude(u => u.Photos.Where(p => p.IsMain))
+            .ToListAsync(cancellationToken);
     }
 
-    public async Task<IEnumerable<ActivityAttendee>> GetUserActivityAttendees(string userId, CancellationToken cancellationToken = default)
+    public async Task<ICollection<ActivityAttendee>> GetUserActivityAttendees(string userId, CancellationToken cancellationToken = default)
     {
         return await _dataContext.ActivityAttendees.Where(at => at.AppUserId == userId).ToListAsync(cancellationToken);
     }
