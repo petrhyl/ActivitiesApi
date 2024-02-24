@@ -62,6 +62,7 @@ public static class ActivityMapper
         activity.Attendees.Add(new ActivityAttendee
         {
             Activity = activity,
+            ActivityId = activity.Id!.Value,
             AppUserId = attender.Id,
             AppUser = attender,
             IsHost = true
@@ -80,7 +81,8 @@ public static class ActivityMapper
         return attendees.Select(at =>
         {
             var attender = at.AppUser.MapToProfileWithoutFollowing();
-            attender.IsCurrentUserFollowing = at.AppUser.Followers.Any(f => f.Follower is not null && f.Follower.UserName == currentUsername);
+            attender.IsFollowedByCurrentUser = at.AppUser.Followers.Any(fr => fr.UserName == currentUsername);
+            attender.IsFollowingCurrentUser = at.AppUser.Followees.Any(fe => fe.UserName == currentUsername);
 
             return new ActivityAttenderResponse
             {

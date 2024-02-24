@@ -36,7 +36,7 @@ public class Edit
                 return Result<Unit>.Failure("Activity ID is not provided");
             }
 
-            var activity = await _activityRepository.GetOnlyActivityDetailsById(request.Activity.Id!.Value, cancellationToken);
+            var activity = await _activityRepository.GetOnlyActivityDetailsById(request.Activity.Id, cancellationToken);
 
             if (activity is null)
             {

@@ -49,7 +49,7 @@ public class FollowToggle
                 return Result<Unit>.Failure("User cannot followe yourself.");
             }
 
-            var result = await _userRepository.UpdateFollowee(followee, follower);
+            var result = await _userRepository.UpdateFollowing(followee, follower);
 
             if (!result)
             {

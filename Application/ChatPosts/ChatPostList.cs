@@ -21,7 +21,7 @@ public class ChatPostList
 
         public async Task<Result<IEnumerable<ChatPostResponse>>> Handle(Query request, CancellationToken cancellationToken)
         {
-            var posts = await _activityRepository.GetChatPostsOfActivity(request.ActivityId);
+            var posts = await _activityRepository.GetChatPostsOfActivity(request.ActivityId, cancellationToken);
 
             return Result<IEnumerable<ChatPostResponse>>.Success(posts.MapToRespnse());
         }

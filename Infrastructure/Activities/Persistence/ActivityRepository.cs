@@ -21,6 +21,7 @@ public class ActivityRepository : IActivityRepository
     public async Task<IEnumerable<Activity>> GetActivities(CancellationToken cancellationToken = default)
     {
         return await _dataContext.Activities
+            .AsNoTracking()
             .Include(a => a.ActivityCategory)
             .AsSplitQuery()
             .Include(a => a.Attendees)
@@ -108,6 +109,7 @@ public class ActivityRepository : IActivityRepository
     public async Task<IEnumerable<ChatPost>> GetChatPostsOfActivity(Guid activityId, CancellationToken cancellationToken = default)
     {
         return await _dataContext.ChatPosts
+            .AsNoTracking()
             .Where(p => p.Activity.Id == activityId)
             .Include(p => p.Author)
             .ThenInclude(a => a.Photos.Where(m => m.IsMain))

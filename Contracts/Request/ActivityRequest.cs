@@ -2,7 +2,7 @@
 
 public class ActivityRequest
 {
-    public Guid? Id { get; set; }
+    public required Guid Id { get; set; }
 
     public required string Title { get; init; }
 

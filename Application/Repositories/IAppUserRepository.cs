@@ -20,10 +20,16 @@ public interface IAppUserRepository
 
     Task<AppUser?> GetUserByUsername(string username, CancellationToken cancellationToken = default);
 
-    Task<bool> UpdateFollowee(AppUser followee, AppUser follower, CancellationToken cancellationToken = default);
+    Task<bool> UpdateFollowing(AppUser followee, AppUser follower, CancellationToken cancellationToken = default);
 
     Task<IEnumerable<AppUser>> GetUserFollowees(string username, CancellationToken cancellationToken = default);
 
     Task<IEnumerable<AppUser>> GetUserFollowers(string username, CancellationToken cancellationToken = default);
+
+    Task<bool> RemoveFollower(string currentUserId, string followerUsername,  CancellationToken cancellationToken = default);
+
+    Task<bool> DoesUserExistWithUsername(string username, CancellationToken cancellationToken = default);
+
+    Task<bool> DoesUserExistWithId(string id, CancellationToken cancellationToken = default);
 }
 

@@ -5,7 +5,7 @@ public class ActivityAttendee
 
     public required AppUser AppUser { get; set; }
 
-    public Guid ActivityId { get; set; }
+    public required Guid ActivityId { get; set; }
 
     public Activity? Activity { get; set; }
 

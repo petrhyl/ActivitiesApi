@@ -45,9 +45,10 @@ public static class UserMapper
             Email = user.Email!,
             Bio = user.Bio ?? string.Empty,
             ImageUrl = user.MainPhoto?.Url ?? string.Empty,
-            FollowingsCount = user.Followings.Count,
+            FolloweesCount = user.Followees.Count,
             FollowersCount = user.Followers.Count,
-            IsCurrentUserFollowing = user.Followers.Any(f => f.Follower.UserName == currentUsername),
+            IsFollowedByCurrentUser = user.Followers.Any(fr => fr.UserName == currentUsername),
+            IsFollowingCurrentUser = user.Followees.Any(fe => fe.UserName == currentUsername),
         };
     }
 
@@ -60,7 +61,7 @@ public static class UserMapper
             Email = user.Email!,
             Bio = user.Bio ?? string.Empty,
             ImageUrl = user.MainPhoto?.Url ?? string.Empty,
-            FollowingsCount = user.Followings.Count,
+            FolloweesCount = user.Followees.Count,
             FollowersCount = user.Followers.Count
         };
     }

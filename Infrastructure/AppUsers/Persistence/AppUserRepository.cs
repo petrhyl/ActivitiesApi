@@ -3,6 +3,7 @@ using Domain.Models;
 using Infrastructure.Common.Persistence;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.ObjectModel;
 
 namespace Infrastructure.AppUsers.Persistence;
 
@@ -21,9 +22,8 @@ public class AppUserRepository : IAppUserRepository
             .Include(u => u.Photos.Where(p => p.IsMain))
             .AsSplitQuery()
             .Include(us => us.Followers)
-                .ThenInclude(uf => uf.Follower)
-            .Include(us => us.Followings)
-                .ThenInclude(uf => uf.Followee)
+            .AsSplitQuery()
+            .Include(us => us.Followees)
             .SingleOrDefaultAsync(u => u.Id == id, cancellationToken: cancellationToken);
     }
 
@@ -88,7 +88,7 @@ public class AppUserRepository : IAppUserRepository
 
         if (user is null)
         {
-            throw new ArgumentException("User not found", nameof(username));
+            return new Collection<PhotoImage>();
         }
 
         return user.Photos;
@@ -102,7 +102,7 @@ public class AppUserRepository : IAppUserRepository
 
         if (user is null)
         {
-            throw new ArgumentException("User not found by ID.");
+            return new Collection<PhotoImage>();
         }
 
         return user.Photos;
@@ -162,51 +162,103 @@ public class AppUserRepository : IAppUserRepository
             .Include(u => u.Photos.Where(p => p.IsMain))
             .AsSplitQuery()
             .Include(us => us.Followers)
-            .ThenInclude(uf => uf.Follower)
-            .Include(us => us.Followings)
-            .ThenInclude(uf => uf.Followee)
+            .AsSplitQuery()
+            .Include(us => us.Followees)
             .SingleOrDefaultAsync(u => u.UserName == username, cancellationToken: cancellationToken);
     }
 
-    public async Task<bool> UpdateFollowee(AppUser followee, AppUser follower, CancellationToken cancellationToken = default)
+    public async Task<bool> UpdateFollowing(AppUser followee, AppUser follower, CancellationToken cancellationToken = default)
     {
-        var following = await _dataContext.UserFollowings.FindAsync(follower.Id, followee.Id, cancellationToken);
-
-        if (following is null)
+        if (followee.Followers.Any(fr => fr.Id == follower.Id))
         {
-            following = new UserFollowing
-            {
-                Follower = follower,
-                FollowerId = follower.Id,
-                Followee = followee,
-                FolloweeId = followee.Id
-            };
-
-            _dataContext.UserFollowings.Add(following);
+            followee.Followers.Remove(follower);
         }
         else
         {
-            _dataContext.UserFollowings.Remove(following);
+            followee.Followers.Add(follower);
         }
 
-        var result = await _dataContext.SaveChangesAsync();
+        var result = await _dataContext.SaveChangesAsync(cancellationToken);
 
         return result > 0;
     }
 
     public async Task<IEnumerable<AppUser>> GetUserFollowees(string username, CancellationToken cancellationToken = default)
     {
-        return await _dataContext.UserFollowings  
-            .Where(f => f.Follower.UserName == username)
-            .Select(f => f.Followee)
-            .ToListAsync(cancellationToken);
+        var user = await _dataContext.Users
+            .AsNoTracking()
+            .Include(u => u.Followees)
+                .ThenInclude(fe => fe.Photos.Where(p => p.IsMain))
+            .AsSplitQuery()
+            .Include(u => u.Followees)
+                .ThenInclude(fr => fr.Followers)
+            .AsSplitQuery()
+            .Include(u => u.Followees)
+                .ThenInclude(fr => fr.Followees)
+            .FirstOrDefaultAsync(u => u.UserName == username, cancellationToken);
+
+        if (user is null)
+        {
+            return new List<AppUser>();
+        }
+
+        return user.Followees;
     }
 
     public async Task<IEnumerable<AppUser>> GetUserFollowers(string username, CancellationToken cancellationToken = default)
     {
-        return await _dataContext.UserFollowings
-            .Where(f => f.Followee.UserName == username)
-            .Select(f => f.Follower)
-            .ToListAsync(cancellationToken);
+        var user = await _dataContext.Users
+            .AsNoTracking()
+            .Include(u => u.Followers)
+               .ThenInclude(fr => fr.Photos.Where(p => p.IsMain))
+            .AsSplitQuery()
+            .Include(u => u.Followers)
+                .ThenInclude(fr => fr.Followers)
+            .AsSplitQuery()
+            .Include(u => u.Followers)
+                .ThenInclude(fr => fr.Followees)
+            .FirstOrDefaultAsync(u => u.UserName == username, cancellationToken);
+
+        if (user is null)
+        {
+            return new List<AppUser>();
+        }
+
+        return user.Followers;
+    }
+
+    public async Task<bool> RemoveFollower(string currentUserId, string followerUsername, CancellationToken cancellationToken = default)
+    {
+        var follower = await _dataContext.Users.SingleOrDefaultAsync(u => u.UserName == followerUsername, cancellationToken);
+
+        if (follower is null)
+        {
+            return false;
+        }
+
+        var followee = await _dataContext.Users
+            .Include(u => u.Followers)
+            .FirstOrDefaultAsync(f => f.Id == currentUserId, cancellationToken);
+
+        if (followee is null)
+        {
+            return false;
+        }
+
+        followee.Followers.Remove(follower);
+
+        var result = await _dataContext.SaveChangesAsync(cancellationToken);
+
+        return result > 0;
+    }
+
+    public async Task<bool> DoesUserExistWithUsername(string username, CancellationToken cancellationToken = default)
+    {
+        return await _dataContext.Users.FirstOrDefaultAsync(u => u.UserName == username, cancellationToken) is not null;
+    }
+
+    public async Task<bool> DoesUserExistWithId(string id, CancellationToken cancellationToken = default)
+    {
+        return await _dataContext.Users.FindAsync(new object[] { id }, cancellationToken: cancellationToken) is not null;
     }
 }

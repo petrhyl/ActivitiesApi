@@ -13,6 +13,8 @@ public interface IAuthService
 
     Task<Result<AppUserResponse>> GetCurrentUser(string token);
 
+    Task<Result<AppUserResponse>> GetUserWithRefreshedToken();
+
     string? GetCurrentUserId();
 
     string? GetCurrentUserUsername();

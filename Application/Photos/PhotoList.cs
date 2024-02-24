@@ -21,6 +21,13 @@ public class PhotoList
 
         public async Task<Result<IEnumerable<PhotoResponse>>> Handle(Query request, CancellationToken cancellationToken)
         {
+            var userExists = await _userRepository.DoesUserExistWithUsername(request.Username, cancellationToken);
+
+            if (!userExists)
+            {
+                return Result<IEnumerable<PhotoResponse>>.Success(null);
+            }
+
             var photos = await _userRepository.GetUserPhotos(request.Username, cancellationToken);
 
             return Result<IEnumerable<PhotoResponse>>.Success(photos.MapToResponse());

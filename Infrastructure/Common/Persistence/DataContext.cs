@@ -20,43 +20,66 @@ public class DataContext : IdentityDbContext<AppUser>
 
     public DbSet<ChatPost> ChatPosts { get; set; }
 
-    public DbSet<UserFollowing> UserFollowings { get; set; }
-
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);
 
-        builder.Entity<ActivityAttendee>(x => x.HasKey(a => new { a.AppUserId, a.ActivityId }));
 
-        builder.Entity<ActivityAttendee>()
-            .HasOne(at => at.AppUser)
-            .WithMany(u => u.Attendees)
-            .HasForeignKey(at => at.AppUserId);
+        builder.Entity<ActivityAttendee>(attendee =>
+        {
+            attendee.HasKey(a => new { a.AppUserId, a.ActivityId });
 
-        builder.Entity<ActivityAttendee>()
-            .HasOne(at => at.Activity)
-            .WithMany(a => a.Attendees)
-            .HasForeignKey(at => at.ActivityId);
+            attendee
+                .HasOne(at => at.Activity)
+                .WithMany(a => a.Attendees)
+                .HasForeignKey(at => at.ActivityId);
 
-        builder.Entity<ChatPost>()
+            attendee
+                .HasOne(at => at.AppUser)
+                .WithMany(u => u.Attendees)
+                .HasForeignKey(at => at.AppUserId);
+        });
+
+        builder.Entity<ChatPost>(post =>
+        {
+            post
             .HasOne(c => c.Activity)
             .WithMany(a => a.Posts)
             .OnDelete(DeleteBehavior.Cascade);
+        });
 
-        builder.Entity<UserFollowing>(t =>
+
+        builder.Entity<AppUser>(user =>
         {
-            t.HasKey(f => new { f.FollowerId, f.FolloweeId });
+            user
+                .HasMany(u => u.Followees)
+                .WithMany(u => u.Followers)
+                .UsingEntity("Followee_Follower",
+                    left => left
+                        .HasOne(typeof(AppUser))
+                        .WithMany()
+                        .HasForeignKey("FolloweeId")
+                        .HasPrincipalKey(nameof(AppUser.Id))
+                        .HasConstraintName("FK_FolloweeFollower_Followee")
+                        .OnDelete(DeleteBehavior.Cascade),
+                    right => right
+                        .HasOne(typeof(AppUser))
+                        .WithMany()
+                        .HasForeignKey("FollowerId")
+                        .HasPrincipalKey(nameof(AppUser.Id))
+                        .HasConstraintName("FK_FolloweeFollower_Follower")
+                        .OnDelete(DeleteBehavior.Cascade),
+                    linkBuilder => linkBuilder.HasKey("FolloweeId", "FollowerId"));
 
-            t.HasOne(f => f.Follower)
-                .WithMany(r => r.Followings)
-                .HasForeignKey(r => r.FollowerId)
-                .OnDelete(DeleteBehavior.Cascade);
+            user
+                .Property(u => u.UserName)
+                .IsRequired();
 
-            t.HasOne(f => f.Followee)
-                .WithMany(r => r.Followers)
-                .HasForeignKey(r => r.FolloweeId)
-                .OnDelete(DeleteBehavior.Cascade);
+            user
+                .HasIndex(u => u.UserName, "AK_User_Username")
+                .IsUnique();
+
         });
     }
 }

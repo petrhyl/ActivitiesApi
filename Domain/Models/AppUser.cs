@@ -14,8 +14,8 @@ public class AppUser : IdentityUser
 
     public ICollection<PhotoImage> Photos { get; set; } = new List<PhotoImage>();
 
-    public ICollection<UserFollowing> Followings { get; set; } = new List<UserFollowing>();
+    public ICollection<AppUser> Followees { get; set; } = new List<AppUser>();
 
-    public ICollection<UserFollowing> Followers { get; set; } = new List<UserFollowing> { };
+    public ICollection<AppUser> Followers { get; set; } = new List<AppUser> { };
 }
 

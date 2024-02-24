@@ -74,19 +74,26 @@ public class AuthService : IAuthService
 
     public async Task<Result<AppUserResponse>> GetCurrentUser(string token)
     {
-        var userId = GetCurrentUserId();
-
-        if (userId is null)
-        {
-            return Result<AppUserResponse>.Failure("User cannot be identified.");
-        }
-        
-        var user = await _userManager.Users.Include(u => u.Photos).SingleOrDefaultAsync(u => u.Id == userId);
+        var user = await GetCurrentUser();
 
         if (user is null)
         {
             return Result<AppUserResponse>.Failure("User cannot be identified.");
         }
+
+        return Result<AppUserResponse>.Success(user.MapToResponse(token));
+    }
+
+    public async Task<Result<AppUserResponse>> GetUserWithRefreshedToken()
+    {
+        var user = await GetCurrentUser();
+
+        if (user is null)
+        {
+            return Result<AppUserResponse>.Failure("User cannot be identified.");
+        }
+
+        var token = _tokenService.CreateToken(user);
 
         return Result<AppUserResponse>.Success(user.MapToResponse(token));
     }
@@ -99,6 +106,18 @@ public class AuthService : IAuthService
     public string? GetCurrentUserUsername()
     {
         return _httpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.Name);
+    }
+
+    private async Task<AppUser?> GetCurrentUser()
+    {
+        var userId = GetCurrentUserId();
+
+        if (userId is null)
+        {
+            return null;
+        }
+
+        return await _userManager.Users.Include(u => u.Photos.Where(p => p.IsMain)).SingleOrDefaultAsync(u => u.Id == userId);
     }
 }
 

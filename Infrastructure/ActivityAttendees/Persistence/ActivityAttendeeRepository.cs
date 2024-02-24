@@ -22,17 +22,16 @@ public class ActivityAttendeeRepository : IActivityAttendeeRepository
     public async Task<ICollection<ActivityAttendee>> GetActivityAttendees(Guid activityId, CancellationToken cancellationToken = default)
     {
         return await _dataContext.ActivityAttendees
+            .AsNoTracking()
             .Where(at => at.ActivityId == activityId)
             .Include(at => at.AppUser)            
                 .ThenInclude(u => u.Followers)
-                    .ThenInclude(f => f.Follower)
             .AsSplitQuery()
             .Include(at => at.AppUser)
-                .ThenInclude(u => u.Followings)
-                    .ThenInclude(f => f.Followee)
+                .ThenInclude(u => u.Followees)
             .AsSplitQuery()
             .Include(at => at.AppUser)
-                    .ThenInclude(u => u.Photos.Where(p => p.IsMain))
+                .ThenInclude(u => u.Photos.Where(p => p.IsMain))
             .ToListAsync(cancellationToken);
     }
 

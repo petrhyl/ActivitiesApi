@@ -12,9 +12,11 @@ public class ProfileResponse
 
     public required string ImageUrl { get; set; }
 
-    public bool IsCurrentUserFollowing { get; set; }
+    public bool IsFollowedByCurrentUser { get; set; }
+
+    public bool IsFollowingCurrentUser { get; set; }
 
     public required long FollowersCount { get; set; }
 
-    public required long FollowingsCount { get; set; }
+    public required long FolloweesCount { get; set; }
 }

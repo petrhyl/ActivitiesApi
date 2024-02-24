@@ -97,12 +97,12 @@ public class Seed
                 IsActive = true,
                 Attendees = new List<ActivityAttendee>
                 {
-                    new ActivityAttendee
-                    {
-                        AppUserId = userManager.Users.Where(u => u.Email == "bob@test.com").First().Id,
-                        AppUser = userManager.Users.Where(u => u.Email == "bob@test.com").First(),
-                        IsHost = true
-                    }
+                //    new ActivityAttendee
+                //    {
+                //        AppUserId = userManager.Users.Where(u => u.Email == "bob@test.com").First().Id,
+                //        AppUser = userManager.Users.Where(u => u.Email == "bob@test.com").First(),
+                //        IsHost = true
+                //    }
                 }
             },
             new Activity
@@ -116,18 +116,18 @@ public class Seed
                 IsActive = true,
                 Attendees = new List<ActivityAttendee>
                 {
-                    new ActivityAttendee
-                    {
-                        AppUserId = userManager.Users.Where(u => u.Email == "bob@test.com").First().Id,
-                        AppUser = userManager.Users.Where(u => u.Email == "bob@test.com").First(),
-                        IsHost = true
-                    },
-                    new ActivityAttendee
-                    {
-                        AppUserId = userManager.Users.Where(u => u.Email == "jane@test.com").First().Id,
-                        AppUser = userManager.Users.Where(u => u.Email == "jane@test.com").First(),
-                        IsHost = false
-                    }
+                    //new ActivityAttendee
+                    //{
+                    //    AppUserId = userManager.Users.Where(u => u.Email == "bob@test.com").First().Id,
+                    //    AppUser = userManager.Users.Where(u => u.Email == "bob@test.com").First(),
+                    //    IsHost = true
+                    //},
+                    //new ActivityAttendee
+                    //{
+                    //    AppUserId = userManager.Users.Where(u => u.Email == "jane@test.com").First().Id,
+                    //    AppUser = userManager.Users.Where(u => u.Email == "jane@test.com").First(),
+                    //    IsHost = false
+                    //}
                 }
             },
             new Activity
@@ -141,18 +141,18 @@ public class Seed
                 IsActive = true,
                 Attendees = new List<ActivityAttendee>
                 {
-                    new ActivityAttendee
-                    {
-                        AppUserId = userManager.Users.Where(u => u.Email == "tom@test.com").First().Id,
-                        AppUser = userManager.Users.Where(u => u.Email == "tom@test.com").First(),
-                        IsHost = true
-                    },
-                    new ActivityAttendee
-                    {
-                        AppUserId = userManager.Users.Where(u => u.Email == "jane@test.com").First().Id,
-                        AppUser = userManager.Users.Where(u => u.Email == "jane@test.com").First(),
-                        IsHost = false
-                    },
+                    //new ActivityAttendee
+                    //{
+                    //    AppUserId = userManager.Users.Where(u => u.Email == "tom@test.com").First().Id,
+                    //    AppUser = userManager.Users.Where(u => u.Email == "tom@test.com").First(),
+                    //    IsHost = true
+                    //},
+                    //new ActivityAttendee
+                    //{
+                    //    AppUserId = userManager.Users.Where(u => u.Email == "jane@test.com").First().Id,
+                    //    AppUser = userManager.Users.Where(u => u.Email == "jane@test.com").First(),
+                    //    IsHost = false
+                    //},
                 }
             },
             new Activity
@@ -166,18 +166,18 @@ public class Seed
                 IsActive = true,
                 Attendees = new List<ActivityAttendee>
                 {
-                    new ActivityAttendee
-                    {
-                        AppUserId = userManager.Users.Where(u => u.Email == "bob@test.com").First().Id,
-                        AppUser = userManager.Users.Where(u => u.Email == "bob@test.com").First(),
-                        IsHost = true
-                    },
-                    new ActivityAttendee
-                    {
-                        AppUserId = userManager.Users.Where(u => u.Email == "tom@test.com").First().Id,
-                        AppUser = userManager.Users.Where(u => u.Email == "tom@test.com").First(),
-                        IsHost = false
-                    },
+                    //new ActivityAttendee
+                    //{
+                    //    AppUserId = userManager.Users.Where(u => u.Email == "bob@test.com").First().Id,
+                    //    AppUser = userManager.Users.Where(u => u.Email == "bob@test.com").First(),
+                    //    IsHost = true
+                    //},
+                    //new ActivityAttendee
+                    //{
+                    //    AppUserId = userManager.Users.Where(u => u.Email == "tom@test.com").First().Id,
+                    //    AppUser = userManager.Users.Where(u => u.Email == "tom@test.com").First(),
+                    //    IsHost = false
+                    //},
                 }
             },
             new Activity
@@ -191,18 +191,18 @@ public class Seed
                 IsActive = true,
                 Attendees = new List<ActivityAttendee>
                 {
-                    new ActivityAttendee
-                    {
-                        AppUserId = userManager.Users.Where(u => u.Email == "jane@test.com").First().Id,
-                        AppUser = userManager.Users.Where(u => u.Email == "jane@test.com").First(),
-                        IsHost = true
-                    },
-                    new ActivityAttendee
-                    {
-                        AppUserId = userManager.Users.Where(u => u.Email == "bob@test.com").First().Id,
-                        AppUser = userManager.Users.Where(u => u.Email == "bob@test.com").First(),
-                        IsHost = false
-                    },
+                    //new ActivityAttendee
+                    //{
+                    //    AppUserId = userManager.Users.Where(u => u.Email == "jane@test.com").First().Id,
+                    //    AppUser = userManager.Users.Where(u => u.Email == "jane@test.com").First(),
+                    //    IsHost = true
+                    //},
+                    //new ActivityAttendee
+                    //{
+                    //    AppUserId = userManager.Users.Where(u => u.Email == "bob@test.com").First().Id,
+                    //    AppUser = userManager.Users.Where(u => u.Email == "bob@test.com").First(),
+                    //    IsHost = false
+                    //},
                 }
             },
             new Activity
@@ -216,12 +216,12 @@ public class Seed
                 IsActive = true,
                 Attendees = new List<ActivityAttendee>
                 {
-                    new ActivityAttendee
-                    {
-                        AppUserId = userManager.Users.Where(u => u.Email == "jane@test.com").First().Id,
-                        AppUser = userManager.Users.Where(u => u.Email == "jane@test.com").First(),
-                        IsHost = true
-                    }
+                    //new ActivityAttendee
+                    //{
+                    //    AppUserId = userManager.Users.Where(u => u.Email == "jane@test.com").First().Id,
+                    //    AppUser = userManager.Users.Where(u => u.Email == "jane@test.com").First(),
+                    //    IsHost = true
+                    //}
                 }
             },
             new Activity
@@ -235,18 +235,18 @@ public class Seed
                 IsActive = true,
                 Attendees = new List<ActivityAttendee>
                 {
-                    new ActivityAttendee
-                    {
-                        AppUserId = userManager.Users.Where(u => u.Email == "bob@test.com").First().Id,
-                        AppUser = userManager.Users.Where(u => u.Email == "bob@test.com").First(),
-                        IsHost = true
-                    },
-                    new ActivityAttendee
-                    {
-                        AppUserId = userManager.Users.Where(u => u.Email == "jane@test.com").First().Id,
-                        AppUser = userManager.Users.Where(u => u.Email == "jane@test.com").First(),
-                        IsHost = false
-                    },
+                    //new ActivityAttendee
+                    //{
+                    //    AppUserId = userManager.Users.Where(u => u.Email == "bob@test.com").First().Id,
+                    //    AppUser = userManager.Users.Where(u => u.Email == "bob@test.com").First(),
+                    //    IsHost = true
+                    //},
+                    //new ActivityAttendee
+                    //{
+                    //    AppUserId = userManager.Users.Where(u => u.Email == "jane@test.com").First().Id,
+                    //    AppUser = userManager.Users.Where(u => u.Email == "jane@test.com").First(),
+                    //    IsHost = false
+                    //},
                 }
             },
             new Activity
@@ -260,18 +260,18 @@ public class Seed
                 IsActive = true,
                 Attendees = new List<ActivityAttendee>
                 {
-                    new ActivityAttendee
-                    {
-                        AppUserId = userManager.Users.Where(u => u.Email == "tom@test.com").First().Id,
-                        AppUser = userManager.Users.Where(u => u.Email == "tom@test.com").First(),
-                        IsHost = true
-                    },
-                    new ActivityAttendee
-                    {
-                        AppUserId = userManager.Users.Where(u => u.Email == "jane@test.com").First().Id,
-                        AppUser = userManager.Users.Where(u => u.Email == "jane@test.com").First(),
-                        IsHost = false
-                    },
+                    //new ActivityAttendee
+                    //{
+                    //    AppUserId = userManager.Users.Where(u => u.Email == "tom@test.com").First().Id,
+                    //    AppUser = userManager.Users.Where(u => u.Email == "tom@test.com").First(),
+                    //    IsHost = true
+                    //},
+                    //new ActivityAttendee
+                    //{
+                    //    AppUserId = userManager.Users.Where(u => u.Email == "jane@test.com").First().Id,
+                    //    AppUser = userManager.Users.Where(u => u.Email == "jane@test.com").First(),
+                    //    IsHost = false
+                    //},
                 }
             },
             new Activity
@@ -285,18 +285,18 @@ public class Seed
                 IsActive = true,
                 Attendees = new List<ActivityAttendee>
                 {
-                    new ActivityAttendee
-                    {
-                        AppUserId = userManager.Users.Where(u => u.Email == "bob@test.com").First().Id,
-                        AppUser = userManager.Users.Where(u => u.Email == "bob@test.com").First(),
-                        IsHost = true
-                    },
-                    new ActivityAttendee
-                    {
-                        AppUserId = userManager.Users.Where(u => u.Email == "tom@test.com").First().Id,
-                        AppUser = userManager.Users.Where(u => u.Email == "tom@test.com").First(),
-                        IsHost = false
-                    },
+                    //new ActivityAttendee
+                    //{
+                    //    AppUserId = userManager.Users.Where(u => u.Email == "bob@test.com").First().Id,
+                    //    AppUser = userManager.Users.Where(u => u.Email == "bob@test.com").First(),
+                    //    IsHost = true
+                    //},
+                    //new ActivityAttendee
+                    //{
+                    //    AppUserId = userManager.Users.Where(u => u.Email == "tom@test.com").First().Id,
+                    //    AppUser = userManager.Users.Where(u => u.Email == "tom@test.com").First(),
+                    //    IsHost = false
+                    //},
                 }
             }
         };

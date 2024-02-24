@@ -26,14 +26,9 @@ public class Details
 
         public async Task<Result<ActivityResponse>> Handle(Query request, CancellationToken cancellationToken)
         {
-            var activity = await _activityRepository.GetActivityById(request.Id);
+            var activity = await _activityRepository.GetActivityById(request.Id, cancellationToken);
 
-            if (activity is null)
-            {
-                return Result<ActivityResponse>.Success(null);
-            }
-
-            var response = activity.MapToResponse(_authService.GetCurrentUserUsername());
+            var response = activity?.MapToResponse(_authService.GetCurrentUserUsername());
 
             return Result<ActivityResponse>.Success(response);
         }

@@ -31,6 +31,11 @@ public class ActivityList
 
             var response = activityList.MapToResponse(_authService.GetCurrentUserUsername());
 
+            if (response is null)
+            {
+                return Result<List<ActivityResponse>>.Success(new List<ActivityResponse>());
+            }
+
             return Result<List<ActivityResponse>>.Success(response.ToList());
         }
     }
