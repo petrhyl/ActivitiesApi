@@ -1,5 +1,4 @@
-﻿using API.SignalR.Providers;
-using Application.Activities;
+﻿using Application.Activities;
 using Application.ChatPosts.Providers;
 using Application.Services.ImageCloud;
 using CloudinaryDotNet;
@@ -39,7 +38,6 @@ public static class ApplicationServiceExtentions
         services.Configure<Account>(config.GetSection("Cloudinary"));
         services.AddScoped<ICloudinary>(opt => new Cloudinary(opt.GetService<IOptions<Account>>()?.Value));
         services.AddScoped<IImageCloudService, ImageCloudService>();
-        services.AddScoped<IHubContextProvider, HubContextProvider>();
         services.AddSignalR();
 
         return services;

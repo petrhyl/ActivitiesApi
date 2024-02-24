@@ -7,5 +7,7 @@ public static class AccountEndpoints
     public const string Login = "login";
 
     public const string Current = "current";
+
+    public const string RefreshToken = "refresh-token";
 }
 

@@ -6,4 +6,5 @@ public class ProfileEndpoints
     public const string UpdateFollowing = "following/{username}";
     public const string GetFollowers = "followers/{username}";
     public const string GetFollowees = "followees/{username}";
+    public const string RemoveFollower = "remove-follower/{username}";
 }

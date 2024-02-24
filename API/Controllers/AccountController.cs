@@ -3,6 +3,7 @@ using Application.Mapping;
 using Application.Services.Auth;
 using Contracts.Request;
 using Contracts.Response;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -47,8 +48,8 @@ public class AccountController : ControllerBase
         return Ok(result.Value);
     }
 
-    [HttpGet(AccountEndpoints.Current)]
     [Authorize]
+    [HttpGet(AccountEndpoints.Current)]
     public async Task<ActionResult<AppUserResponse>> GetCurrentUser([FromHeader(Name = "Authorization")] string? authenticationHeader)
     {
         if (authenticationHeader is null)
@@ -71,6 +72,20 @@ public class AccountController : ControllerBase
         }
 
         return Ok(result.Value);
-    }        
+    }
+
+    [Authorize]
+    [HttpGet(AccountEndpoints.RefreshToken)]
+    public async Task<ActionResult<AppUserResponse>> RefreshToken()
+    {
+        var result = await _authService.GetUserWithRefreshedToken();
+
+        if (!result.IsScucess)
+        {
+            return BadRequest(result.Error);
+        }
+
+        return Ok(result.Value);
+    }
 }
 

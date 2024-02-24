@@ -1,5 +1,4 @@
-﻿using API.SignalR.Providers;
-using Application.ChatPosts;
+﻿using Application.ChatPosts;
 using Application.Services.Auth;
 using Contracts.Request;
 using MediatR;
